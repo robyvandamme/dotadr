@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Roslynator.Analyzers" Version="4.13.1" PrivateAssets="All"/>
-    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.13.1" PrivateAssets="All"/>
+    <PackageReference Include="Roslynator.Analyzers" Version="4.14.0" PrivateAssets="All" />
+    <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.14.0" PrivateAssets="All" />
     <PackageReference Include="Serilog" Version="4.3.0"/>
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
