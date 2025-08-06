@@ -1,6 +1,6 @@
-using System;
+// Copyright © 2025 Roby Van Damme.
+
 using System.ComponentModel;
-using System.Linq;
 using Nuke.Common.Tooling;
 
 [TypeConverter(typeof(TypeConverter<Configuration>))]
