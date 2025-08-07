@@ -1,6 +1,9 @@
 // Copyright © 2025 Roby Van Damme.
 
 using System.Diagnostics;
+using DotAdr.Commands;
+using DotAdr.Commands.Init;
+using DotAdr.Config;
 using Serilog;
 using Spectre.Console.Cli;
 
@@ -23,16 +26,14 @@ internal static class CommandConfiguration
             config.SetApplicationName("dotadr");
             config.Settings.Registrar.RegisterInstance(logger);
 
+            config.Settings.Registrar.Register<IConfigurationService, ConfigurationService>();
+            config.Settings.Registrar.Register<IAdrFileService, AdrFileService>();
+            config.Settings.Registrar.Register<IAdrFactory, AdrFactory>();
 
-            // config.AddCommand<BumpSdkCommand>(name: "sdk")
-            //     .WithDescription(
-            //         "Bump the global.json SDK version. " +
-            //         "Use the 'minor' type option to bump the SDK to the latest minor or patch version for the current major version. " +
-            //         "Use the 'patch' type option to bump the SDK to the latest patch version for the current major version. ")
-            //     .WithExample("sdk", "-o", "bump-sdk-result.json", "--security-only", "true")
-            //     .WithExample("sdk", "-t", "patch", "-o", "bump-sdk-result.json", "-s", "true")
-            //     .WithExample("sdk", "--type", "patch", "-f", "./other/global.json")
-            //     .WithExample("sdk", "--debug", "true", "--logfile", "log.txt");
+            config.AddCommand<AdrInitCommand>(name: "init")
+                .WithDescription("Initialize the ADR directory")
+                .WithExample("init")
+                .WithExample("init", "-d", "./doc/arch/adr");
         });
     }
 }
