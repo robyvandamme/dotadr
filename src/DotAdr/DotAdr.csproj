@@ -23,4 +23,9 @@
     </AdditionalFiles>
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="DotAdr.Tests"/>
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+  </ItemGroup>
+
 </Project>
