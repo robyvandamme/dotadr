@@ -39,4 +39,31 @@ public class ConfigurationServiceTests
             Should.Throw<DotAdrException>(() => service.SaveAdrConfiguration(directory));
         }
     }
+
+    public class GetDotAdrConfiguration
+    {
+        [Fact]
+        public void Gets_Configuration()
+        {
+            var service = new ConfigurationService(new Mock<ILogger>().Object);
+            var directory = new LocalDirectory("test/adr");
+
+            service.ConfigFilePath.EnsureFileDeleted();
+
+            service.SaveAdrConfiguration(directory);
+
+            var config = service.GetDotAdrConfiguration();
+            config.Directory.ShouldBe(directory.RelativePath);
+        }
+
+        [Fact]
+        public void Throws_When_Configuration_File_Not_Present()
+        {
+            var service = new ConfigurationService(new Mock<ILogger>().Object);
+
+            service.ConfigFilePath.EnsureFileDeleted();
+
+            Should.Throw<DotAdrException>(() => service.GetDotAdrConfiguration());
+        }
+    }
 }
