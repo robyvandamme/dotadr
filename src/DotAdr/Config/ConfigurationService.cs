@@ -41,26 +41,6 @@ public class ConfigurationService(ILogger logger) : IConfigurationService
         logger.MethodReturn(nameof(ConfigurationService), nameof(SaveAdrConfiguration));
     }
 
-    public DotAdrConfig GetAdrConfiguration()
-    {
-        logger.MethodStart(nameof(ConfigurationService), nameof(GetAdrConfiguration));
-
-        var config = GetConfiguration();
-        if (config == null)
-        {
-            throw new DotAdrException($"No configuration found at {_configFilePath}");
-        }
-
-        if (string.IsNullOrWhiteSpace(config.Directory))
-        {
-            throw new DotAdrException($"ADR configuration directory value at {_configFilePath} is null or empty");
-        }
-
-        logger.MethodReturn(nameof(ConfigurationService), nameof(GetAdrConfiguration));
-
-        return config;
-    }
-
     /// <summary>
     /// Gets DotBot config from the .bot directory.
     /// </summary>
@@ -91,8 +71,6 @@ public class ConfigurationService(ILogger logger) : IConfigurationService
         logger.MethodStart(nameof(ConfigurationService), nameof(SaveConfiguration));
         ArgumentNullException.ThrowIfNull(config);
         var jsonString = JsonSerializer.Serialize(config, _jsonSerializerOptions);
-        var directory = new DirectoryInfo(".bot");
-        directory.Create();
         File.WriteAllText(_configFilePath, jsonString);
         logger.MethodReturn(nameof(ConfigurationService), nameof(SaveConfiguration));
     }

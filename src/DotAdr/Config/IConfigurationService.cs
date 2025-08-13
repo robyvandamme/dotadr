@@ -12,9 +12,6 @@ namespace DotAdr.Config
         /// <param name="adrDirectory">The relative ADR directory path.</param>
         void SaveAdrConfiguration(LocalDirectory adrDirectory);
 
-        [Obsolete("Duplicate", false)]
-        DotAdrConfig GetAdrConfiguration();
-
         /// <summary>
         /// Gets DotBot config from the .bot directory.
         /// </summary>
