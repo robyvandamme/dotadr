@@ -1,6 +1,10 @@
 // Copyright © 2025 Roby Van Damme.
 
 using DotAdr.Common;
+using DotAdr.Config;
+using Moq;
+using Serilog;
+using Shouldly;
 
 namespace DotAdr.Tests.Config;
 
@@ -11,15 +15,12 @@ public class ConfigurationServiceTests
         [Fact]
         public void Saves_Configuration_To_File()
         {
-            var configDirectory = new LocalDirectory(".bot");
-            configDirectory.EnsureDirectoryDeleted();
+            var service = new ConfigurationService(new Mock<ILogger>().Object);
+            var directory = new LocalDirectory("test/adr");
+            service.SaveAdrConfiguration(directory);
 
-            // var service = new ConfigurationService(new Mock<ILogger>().Object);
-            // var directory = new LocalDirectory("test/adr");
-            // service.SaveAdrConfiguration(directory);
-            //
-            // var config = service.GetDotBotConfiguration();
-            // config.Adr.Directory.ShouldBe(directory.RelativePath);
+            var config = service.GetDotAdrConfiguration();
+            config.Directory.ShouldBe(directory.RelativePath);
         }
     }
 }
