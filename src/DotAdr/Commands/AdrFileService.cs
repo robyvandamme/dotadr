@@ -25,7 +25,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
 
         // AdrFileService.cs(28, 47): [CA1062] In externally visible method 'void AdrFileService.InitializeDirectory(DotBotDirectory directory, string decisionTemplate, string initialDecisionRecord, string initialDecisionRecordTitle)', validate parameter 'directory' is non-null before using it. If appropriate, throw an 'ArgumentNullException' when the argument is 'null'. (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1062)
         // ArgumentNullException.ThrowIfNull does not resolve the above warning....
-        Debug.Assert(adrDirectory != null, nameof(adrDirectory) + " != null");
+        // Debug.Assert(adrDirectory != null, nameof(adrDirectory) + " != null");
         var directoryInfo = new DirectoryInfo(adrDirectory.AbsolutePath);
         if (!directoryInfo.Exists)
         {
@@ -94,6 +94,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
             throw new DotAdrException($"The directory {directory} does not exist");
         }
 
+        // TODO: we need this info for the adr factory...
         var nextNumber = GetNextFileNumber(directory.AbsolutePath);
 
         // Create a file name friendly version of the title

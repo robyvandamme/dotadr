@@ -16,17 +16,29 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         var sb = new StringBuilder();
         sb.Append("# ADR Template");
         sb.AppendLine();
+        sb.AppendLine();
+        sb.Append("---");
+        sb.AppendLine();
+        sb.AppendLine();
+        sb.Append("Status: Draft");
+        sb.AppendLine();
+        sb.AppendLine();
 #pragma warning disable CA1305
-        sb.Append(
-            $"Date: {DateOnly.FromDateTime(DateTime.MinValue).ToString("O",
-                CultureInfo.InvariantCulture)}");
+        sb.Append($"Date: {DateOnly.FromDateTime(DateTime.MinValue).ToString("O", CultureInfo.InvariantCulture)}");
 #pragma warning restore CA1305
         sb.AppendLine();
-        sb.Append("## Status");
+        sb.AppendLine();
+        sb.Append("Authors: ");
+        sb.AppendLine();
+        sb.AppendLine();
+        sb.Append("---");
+        sb.AppendLine();
         sb.AppendLine();
         sb.Append("## Context");
         sb.AppendLine();
+        sb.AppendLine();
         sb.Append("## Decision");
+        sb.AppendLine();
         sb.AppendLine();
         sb.Append("## Consequences");
 
@@ -38,6 +50,7 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionRecord));
 
+        // TODO: we also need the decision record number here.
         var newDateString = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture);
 
         // Replace the header (assumes the header is in Markdown format like "# Title")

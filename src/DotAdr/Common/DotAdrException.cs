@@ -2,7 +2,7 @@
 
 namespace DotAdr.Common;
 
-internal class DotAdrException : Exception
+public class DotAdrException : Exception
 {
     public DotAdrException(string message)
         : base(message)
