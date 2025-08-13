@@ -4,7 +4,7 @@ using DotAdr.Common;
 
 namespace DotAdr.Tests;
 
-public static class TestFileHelpers
+internal static class TestFileHelpers
 {
     public static void EnsureDirectoryCreated(this LocalDirectory localDirectory)
     {

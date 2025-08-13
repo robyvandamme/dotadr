@@ -4,7 +4,7 @@ using DotAdr.Common;
 
 namespace DotAdr.Commands;
 
-public interface IAdrFileService
+internal interface IAdrFileService
 {
     /// <summary>
     /// Get the template from the ADR directory.

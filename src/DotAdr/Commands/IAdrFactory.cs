@@ -2,7 +2,7 @@
 
 namespace DotAdr.Commands;
 
-public interface IAdrFactory
+internal interface IAdrFactory
 {
     string CreateDecisionTemplate();
 

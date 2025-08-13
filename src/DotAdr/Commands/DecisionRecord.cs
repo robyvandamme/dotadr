@@ -2,4 +2,4 @@
 
 namespace DotAdr.Commands;
 
-public record DecisionRecord(string Title, string Content);
+internal record DecisionRecord(string Title, string Content);

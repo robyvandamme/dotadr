@@ -8,24 +8,27 @@ using Serilog;
 
 namespace DotAdr.Commands;
 
-public class AdrFactory(ILogger logger) : IAdrFactory
+internal class AdrFactory(ILogger logger) : IAdrFactory
 {
     public string CreateDecisionTemplate()
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionTemplate));
         var sb = new StringBuilder();
-        // using (var writer = MarkdownWriter.Create(sb))
-        // {
-        //     writer.WriteHeading1("ADR Template");
-        //     writer.WriteRaw(
-        //         $"Date: {DateOnly.FromDateTime(DateTime.MinValue).ToString("O", CultureInfo.InvariantCulture)}");
-        //     writer.WriteLine();
-        //     writer.WriteHeading2("Status");
-        //     writer.WriteString("Proposed");
-        //     writer.WriteHeading2("Context");
-        //     writer.WriteHeading2("Decision");
-        //     writer.WriteHeading2("Consequences");
-        // }
+        sb.Append("# ADR Template");
+        sb.AppendLine();
+#pragma warning disable CA1305
+        sb.Append(
+            $"Date: {DateOnly.FromDateTime(DateTime.MinValue).ToString("O",
+                CultureInfo.InvariantCulture)}");
+#pragma warning restore CA1305
+        sb.AppendLine();
+        sb.Append("## Status");
+        sb.AppendLine();
+        sb.Append("## Context");
+        sb.AppendLine();
+        sb.Append("## Decision");
+        sb.AppendLine();
+        sb.Append("## Consequences");
 
         logger.MethodReturn(nameof(AdrFactory), nameof(CreateDecisionTemplate), sb.ToString());
         return sb.ToString();

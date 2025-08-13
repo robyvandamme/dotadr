@@ -2,7 +2,7 @@
 
 namespace DotAdr.Common;
 
-public record LocalDirectory(string RelativePath)
+internal record LocalDirectory(string RelativePath)
 {
     public string AbsolutePath { get; init; } = Path.GetFullPath(RelativePath);
 
