@@ -4,7 +4,7 @@ using DotAdr.Common;
 
 namespace DotAdr.Config
 {
-    public interface IConfigurationService
+    internal interface IConfigurationService
     {
         /// <summary>
         /// Saves the ADR configuration.

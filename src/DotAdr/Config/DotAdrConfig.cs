@@ -2,4 +2,4 @@
 
 namespace DotAdr.Config;
 
-public record DotAdrConfig(int Version, string Directory);
+public record DotAdrConfig(string Directory);

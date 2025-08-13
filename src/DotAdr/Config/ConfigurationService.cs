@@ -6,14 +6,14 @@ using Serilog;
 
 namespace DotAdr.Config;
 
-public class ConfigurationService(ILogger logger) : IConfigurationService
+internal class ConfigurationService(ILogger logger) : IConfigurationService
 {
-    private readonly string _configFilePath = "./dotadr.json";
-
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
         WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
+
+    internal string ConfigFilePath { get; } = "./dotadr.json";
 
     /// <summary>
     /// Save the relative ADR directory path to the configuration file.
@@ -25,17 +25,16 @@ public class ConfigurationService(ILogger logger) : IConfigurationService
 
         ArgumentNullException.ThrowIfNull(adrDirectory);
 
-        var fileInfo = new FileInfo(_configFilePath);
+        var fileInfo = new FileInfo(ConfigFilePath);
         if (!fileInfo.Exists)
         {
-            var config = new DotAdrConfig(1, adrDirectory.RelativePath);
+            var config = new DotAdrConfig(adrDirectory.RelativePath);
             SaveConfiguration(config);
         }
         else
         {
-            var config = GetConfiguration();
-            var newConfig = config with { Directory = adrDirectory.RelativePath };
-            SaveConfiguration(newConfig);
+            // There already is a dotadr.json configuration file. What does that mean? Init was already called.... Throw for now....
+            throw new DotAdrException($"There is already a configuration file present at {ConfigFilePath}");
         }
 
         logger.MethodReturn(nameof(ConfigurationService), nameof(SaveAdrConfiguration));
@@ -53,12 +52,12 @@ public class ConfigurationService(ILogger logger) : IConfigurationService
         var config = GetConfiguration();
         if (config == null)
         {
-            throw new DotAdrException($"No configuration found at {_configFilePath}");
+            throw new DotAdrException($"No configuration found at {ConfigFilePath}");
         }
 
         if (string.IsNullOrWhiteSpace(config.Directory))
         {
-            throw new DotAdrException($"ADR configuration directory value at {_configFilePath} is null or empty");
+            throw new DotAdrException($"ADR configuration directory value at {ConfigFilePath} is null or empty");
         }
 
         logger.MethodReturn(nameof(ConfigurationService), nameof(GetDotAdrConfiguration));
@@ -71,7 +70,7 @@ public class ConfigurationService(ILogger logger) : IConfigurationService
         logger.MethodStart(nameof(ConfigurationService), nameof(SaveConfiguration));
         ArgumentNullException.ThrowIfNull(config);
         var jsonString = JsonSerializer.Serialize(config, _jsonSerializerOptions);
-        File.WriteAllText(_configFilePath, jsonString);
+        File.WriteAllText(ConfigFilePath, jsonString);
         logger.MethodReturn(nameof(ConfigurationService), nameof(SaveConfiguration));
     }
 
@@ -83,18 +82,18 @@ public class ConfigurationService(ILogger logger) : IConfigurationService
     private DotAdrConfig GetConfiguration()
     {
         logger.MethodStart(nameof(ConfigurationService), nameof(GetConfiguration));
-        var fileInfo = new FileInfo(_configFilePath);
+        var fileInfo = new FileInfo(ConfigFilePath);
         if (!fileInfo.Exists)
         {
-            throw new DotAdrException($"Configuration file does not exist at {_configFilePath}");
+            throw new DotAdrException($"Configuration file does not exist at {ConfigFilePath}");
         }
 
-        var jsonString = File.ReadAllText(_configFilePath);
+        var jsonString = File.ReadAllText(ConfigFilePath);
         var config = JsonSerializer.Deserialize<DotAdrConfig>(jsonString, _jsonSerializerOptions);
 
         if (config == null)
         {
-            throw new DotAdrException($"Failed to read configuration at {_configFilePath}");
+            throw new DotAdrException($"Failed to read configuration at {ConfigFilePath}");
         }
 
         logger.MethodReturn(nameof(ConfigurationService), nameof(GetConfiguration));

@@ -50,4 +50,14 @@ public static class TestFileHelpers
             info.Delete();
         }
     }
+
+    public static void EnsureFileDeleted(this string fileName)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(fileName);
+        var info = new FileInfo(fileName);
+        if (info.Exists)
+        {
+            info.Delete();
+        }
+    }
 }
