@@ -25,7 +25,7 @@ dotnet dotadr add "Superseded functionality implementation" -s 001 or -s 1
 
 When a record supersedes another record:
 * In the new record the `{{SUPERSEDES}}`variable is replaced by "Supersedes: " + a link to the superseded record.
-* In the superseded record "* Status: whatever current status" is replaced by "* Status: Superseded by " + a link to the superseding decision record.
+* In the superseded record "* Status: whatever current status" is replaced by "* Status: Superseded by " + a link to the new superseding decision record.
 
 
 
