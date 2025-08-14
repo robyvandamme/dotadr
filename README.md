@@ -15,7 +15,7 @@ The template variables that are updated when a new decision record is created ar
 
 You can choose to not include a variable, in that case it is simply ignored.
 
-In order for the superseding functionality to work you will need to keep the `"Status: xxxx"` section more or less intact. See below for more information.
+In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information.
 
 ### Superseding a Decision Record
 
