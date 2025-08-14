@@ -23,6 +23,7 @@ internal class AdrInitCommand(
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(settings);
 
+        // Validate input using Spectre Validation: how does that work? Do in .ADR and bring in once clear.
         try
         {
             if (context.Name != "init")

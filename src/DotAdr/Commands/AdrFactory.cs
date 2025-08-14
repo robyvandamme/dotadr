@@ -14,24 +14,12 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionTemplate));
         var sb = new StringBuilder();
-        sb.Append("# ADR Template");
+        sb.Append("# {{ID}} {{TITLE}}");
         sb.AppendLine();
         sb.AppendLine();
-        sb.Append("---");
+        sb.Append("* Status: Draft");
         sb.AppendLine();
-        sb.AppendLine();
-        sb.Append("Status: Draft");
-        sb.AppendLine();
-        sb.AppendLine();
-#pragma warning disable CA1305
-        sb.Append($"Date: {DateOnly.FromDateTime(DateTime.MinValue).ToString("O", CultureInfo.InvariantCulture)}");
-#pragma warning restore CA1305
-        sb.AppendLine();
-        sb.AppendLine();
-        sb.Append("Authors: ");
-        sb.AppendLine();
-        sb.AppendLine();
-        sb.Append("---");
+        sb.Append("* Date: {{DATE}} ");
         sb.AppendLine();
         sb.AppendLine();
         sb.Append("## Context");
