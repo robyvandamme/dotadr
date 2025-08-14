@@ -2,9 +2,26 @@
 
 .NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
-The default template is based on [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions).
+## ADR Template
 
-## Using a Different Template
+The default template is based on [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) and looks like this:
+
+```markdown
+# {{ID}} {{TITLE}}
+
+* Status: Draft
+* Date: {{DATE}}
+{{SUPERSEDES}} 
+
+## Context
+
+## Decision
+
+## Consequences
+
+```
+
+### Changing the ADR Template
 
 If you want to change the template or use a different template altogether it's probably best to keep the title and the header section as is to avoid unexpected behavior.
 The template variables that are updated when a new decision record is created are:
@@ -24,7 +41,7 @@ dotnet dotadr add "Superseded functionality implementation" -s 001 or -s 1
 ```
 
 When a record supersedes another record:
-* In the new record the `{{SUPERSEDES}}`variable is replaced by "Supersedes: " + a link to the superseded record.
+* In the new record the `{{SUPERSEDES}}`variable is replaced by "* Supersedes: " + a link to the superseded record.
 * In the superseded record "* Status: whatever current status" is replaced by "* Status: Superseded by " + a link to the new superseding decision record.
 
 
