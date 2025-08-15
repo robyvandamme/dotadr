@@ -40,7 +40,7 @@ The output for the initial decision record that is added upon initialization loo
 
 The template variables that are updated when a new decision record is created are:
 
-* `{{ID}}`: the numeric identifier of the decision record
+* `{{ID}}`: the identifier of the decision record
 * `{{TITLE}}`: the title of the decision record
 * `{{DATE}}`: the date the decision record is added
 
