@@ -46,7 +46,7 @@ The template variables that are updated when a new decision record is created ar
 
 ### Changing the Template
 
-If you want to change the template or use a different template altogether it's probably best to keep the title and the header section more or less intact to avoid unexpected behavior.
+If you want to change the template or use a different template it's probably best to keep the title and the header section more or less intact to avoid unexpected behavior.
 You can choose to not include a variable, in that case it is simply ignored.
 
 In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information. (TBD)
