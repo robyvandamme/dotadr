@@ -21,15 +21,18 @@ The default template is based on [Documenting Architecture Decisions](https://co
 
 ```
 
-### Changing the Template
+### Template Variables
 
-If you want to change the template or use a different template altogether it's probably best to keep the title and the header section more or less intact to avoid unexpected behavior.
 The template variables that are updated when a new decision record is created are:
+
 * `{{ID}}`: the numeric identifier of the decision record
 * `{{TITLE}}`: the title of the decision record
 * `{{DATE}}`: the date the decision record is added
-* `{{SUPERSEDES}}`: "* Supersedes: " and a link to the decision record that this record supersedes 
+* `{{SUPERSEDES}}`: "* Supersedes: " and a link to the decision record that this record supersedes
 
+### Changing the Template
+
+If you want to change the template or use a different template altogether it's probably best to keep the title and the header section more or less intact to avoid unexpected behavior.
 You can choose to not include a variable, in that case it is simply ignored.
 
 In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information.
