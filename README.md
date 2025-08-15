@@ -38,7 +38,7 @@ The output for the initial decision record that is added upon initialization loo
 
 ### Template Variables
 
-The template variables that are updated when a new decision record is created are:
+The template variables that are updated when a new decision record is added are:
 
 * `{{ID}}`: the identifier of the decision record
 * `{{TITLE}}`: the title of the decision record
@@ -46,12 +46,13 @@ The template variables that are updated when a new decision record is created ar
 
 ### Changing the Template
 
-If you want to change the template or use a different template it's probably best to keep the title and the header section more or less intact to avoid unexpected behavior.
+If you want to change the template it's probably best to keep the header section (Status and Date) more or less intact to prevent incompatibility in the future.
 You can choose to not include a variable, in that case it is simply ignored.
 
-In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information. (TBD)
 
 ### Superseding a Decision Record (TBD)
+
+In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information. (TBD)
 
 ```shell
 dotnet dotadr add "Superseding decision record" -s 001 or -s 1
