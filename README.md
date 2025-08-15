@@ -11,7 +11,22 @@ The default template is based on [Documenting Architecture Decisions](https://co
 
 * Status: Draft
 * Date: {{DATE}}
-{{SUPERSEDES}} 
+
+## Context
+
+## Decision
+
+## Consequences
+
+```
+
+The output for the initial decision record that is added upon initialization looks like this:
+
+```markdown
+# 001 Use Architectural Decision Records
+
+* Status: Draft
+* Date: 2025-08-13
 
 ## Context
 
@@ -28,16 +43,15 @@ The template variables that are updated when a new decision record is created ar
 * `{{ID}}`: the numeric identifier of the decision record
 * `{{TITLE}}`: the title of the decision record
 * `{{DATE}}`: the date the decision record is added
-* `{{SUPERSEDES}}`: "* Supersedes: " and a link to the decision record that this record supersedes
 
 ### Changing the Template
 
 If you want to change the template or use a different template altogether it's probably best to keep the title and the header section more or less intact to avoid unexpected behavior.
 You can choose to not include a variable, in that case it is simply ignored.
 
-In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information.
+In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information. (TBD)
 
-### Superseding a Decision Record
+### Superseding a Decision Record (TBD)
 
 ```shell
 dotnet dotadr add "Superseding decision record" -s 001 or -s 1
@@ -50,3 +64,9 @@ When a record supersedes another record:
 ```markdown
 * Status: Accepted - Superseded by [005](...) 2025-08-10
 ```
+
+#### Variables
+
+* `{{SUPERSEDES-LINK}}`: A link to the decision record that this record supersedes (TBD)
+* `{{SUPERSEDES-LIST-ITEM}}`: "* Supersedes: " (TBD)
+* `{{SUPERSEDES}}`: "Supersedes" (TBD)
