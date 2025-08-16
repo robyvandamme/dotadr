@@ -2,6 +2,34 @@
 
 .NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
+NOTE: only tested on MacOS.
+
+## Features
+
+### Initialize the ADR Directory
+
+Creates the ADR directory, adds the default template and a first decision record and saves the ADR directory to the `dotadr.json` file.
+
+```text
+DESCRIPTION:
+Initialize the ADR directory
+
+USAGE:
+    dotadr init [OPTIONS]
+
+EXAMPLES:
+    dotadr init
+    dotadr init -d ./doc/arch/adr
+
+OPTIONS:
+    -h, --help         Prints help information                             
+        --debug        Enable debug logging for troubleshooting            
+        --logfile      The file to send the log output to                  
+    -d, --directory    The directory to initialize. Defaults to `./doc/adr`
+
+
+```
+
 ## ADR Template
 
 The default template is based on [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) and looks like this:
@@ -36,38 +64,7 @@ The output for the initial decision record that is added upon initialization loo
 
 ```
 
-### Template Variables
-
-The template variables that are updated when a new decision record is added are:
-
-* `{{ID}}`: the identifier of the decision record
-* `{{TITLE}}`: the title of the decision record
-* `{{DATE}}`: the date the decision record is added
-
 ### Changing the Template
 
-If you want to change the template it's probably best to keep the header section (Status and Date) more or less intact to prevent incompatibility in the future.
+Feel free to customize the template, but consider keeping the Status and Date sections as-is to maintain full feature compatibility.
 You can choose to not include a variable, in that case it is simply ignored.
-
-
-### Superseding a Decision Record (TBD)
-
-In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` section in the template more or less intact. See below for more information. (TBD)
-
-```shell
-dotnet dotadr add "Superseding decision record" -s 001 or -s 1
-```
-
-When a record supersedes another record:
-* In the new record the `{{SUPERSEDES}}` variable is replaced by "* Supersedes: " + a link to the superseded record.
-* In the superseded record "* Status: [current status]" is replaced by "* Status: [current status] - Superseded by " + a link to the new superseding decision record and the date.
-
-```markdown
-* Status: Accepted - Superseded by [005](...) 2025-08-10
-```
-
-#### Variables
-
-* `{{SUPERSEDES-LINK}}`: A link to the decision record that this record supersedes (TBD)
-* `{{SUPERSEDES-LIST-ITEM}}`: "* Supersedes: " (TBD)
-* `{{SUPERSEDES}}`: "Supersedes" (TBD)
