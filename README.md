@@ -48,7 +48,7 @@ The default template is based on [Documenting Architecture Decisions](https://co
 
 ```
 
-The output for the initial decision record that is added upon initialization looks like this:
+The decision record that is added upon initialization looks like this:
 
 ```markdown
 # 001 Use Architectural Decision Records
