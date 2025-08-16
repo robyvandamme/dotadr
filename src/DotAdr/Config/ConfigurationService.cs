@@ -25,11 +25,13 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
 
         ArgumentNullException.ThrowIfNull(adrDirectory);
 
+        // FileInfo constructor automatically calls Path.GetFullPath() internally? So this should work across platforms...
         var fileInfo = new FileInfo(ConfigFilePath);
         if (!fileInfo.Exists)
         {
-            var config = new DotAdrConfig(adrDirectory.RelativePath);
-            SaveConfiguration(config);
+            var config = new DotAdrConfig(adrDirectory.NormalizedPath);
+            var jsonString = JsonSerializer.Serialize(config, _jsonSerializerOptions);
+            File.WriteAllText(ConfigFilePath, jsonString);
         }
         else
         {
@@ -49,39 +51,6 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
     {
         logger.MethodStart(nameof(ConfigurationService), nameof(GetDotAdrConfiguration));
 
-        var config = GetConfiguration();
-        if (config == null)
-        {
-            throw new DotAdrException($"No configuration found at {ConfigFilePath}");
-        }
-
-        if (string.IsNullOrWhiteSpace(config.Directory))
-        {
-            throw new DotAdrException($"ADR configuration directory value at {ConfigFilePath} is null or empty");
-        }
-
-        logger.MethodReturn(nameof(ConfigurationService), nameof(GetDotAdrConfiguration));
-
-        return config;
-    }
-
-    private void SaveConfiguration(DotAdrConfig config)
-    {
-        logger.MethodStart(nameof(ConfigurationService), nameof(SaveConfiguration));
-        ArgumentNullException.ThrowIfNull(config);
-        var jsonString = JsonSerializer.Serialize(config, _jsonSerializerOptions);
-        File.WriteAllText(ConfigFilePath, jsonString);
-        logger.MethodReturn(nameof(ConfigurationService), nameof(SaveConfiguration));
-    }
-
-    /// <summary>
-    /// Get the configuration.
-    /// </summary>
-    /// <returns><see cref="DotAdrConfig"/>The configuration.</returns>
-    /// <exception cref="DotAdrException">When an error occurs reading the configuration file.</exception>
-    private DotAdrConfig GetConfiguration()
-    {
-        logger.MethodStart(nameof(ConfigurationService), nameof(GetConfiguration));
         var fileInfo = new FileInfo(ConfigFilePath);
         if (!fileInfo.Exists)
         {
@@ -96,7 +65,39 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
             throw new DotAdrException($"Failed to read configuration at {ConfigFilePath}");
         }
 
-        logger.MethodReturn(nameof(ConfigurationService), nameof(GetConfiguration));
+        if (string.IsNullOrWhiteSpace(config.Directory))
+        {
+            throw new DotAdrException($"ADR configuration directory value at {ConfigFilePath} is null or empty");
+        }
+
+        logger.MethodReturn(nameof(ConfigurationService), nameof(GetDotAdrConfiguration));
+
         return config;
     }
+
+    /// <summary>
+    /// Get the configuration.
+    /// </summary>
+    /// <returns><see cref="DotAdrConfig"/>The configuration.</returns>
+    /// <exception cref="DotAdrException">When an error occurs reading the configuration file.</exception>
+    // private DotAdrConfig GetConfiguration()
+    // {
+    //     logger.MethodStart(nameof(ConfigurationService), nameof(GetConfiguration));
+    //     var fileInfo = new FileInfo(ConfigFilePath);
+    //     if (!fileInfo.Exists)
+    //     {
+    //         throw new DotAdrException($"Configuration file does not exist at {ConfigFilePath}");
+    //     }
+    //
+    //     var jsonString = File.ReadAllText(ConfigFilePath);
+    //     var config = JsonSerializer.Deserialize<DotAdrConfig>(jsonString, _jsonSerializerOptions);
+    //
+    //     if (config == null)
+    //     {
+    //         throw new DotAdrException($"Failed to read configuration at {ConfigFilePath}");
+    //     }
+    //
+    //     logger.MethodReturn(nameof(ConfigurationService), nameof(GetConfiguration));
+    //     return config;
+    // }
 }

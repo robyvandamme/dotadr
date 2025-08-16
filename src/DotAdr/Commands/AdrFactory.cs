@@ -34,10 +34,13 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return sb.ToString();
     }
 
-    public DecisionRecord CreateDecisionRecord(string templateContent, string decisionTitle)
+    public DecisionRecord CreateDecisionRecord(int id, string templateContent, string decisionTitle)
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionRecord));
 
+        // TODO: adapt to match new template
+        
+        
         // TODO: we also need the decision record number here.
         var newDateString = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture);
 
@@ -56,6 +59,6 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
 
         logger.MethodReturn(nameof(AdrFactory), nameof(CreateDecisionRecord), updatedContent);
 
-        return new DecisionRecord(decisionTitle, updatedContent);
+        return new DecisionRecord(id, decisionTitle, updatedContent);
     }
 }

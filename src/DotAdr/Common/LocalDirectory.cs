@@ -4,9 +4,9 @@ namespace DotAdr.Common;
 
 internal record LocalDirectory(string RelativePath)
 {
-    public string AbsolutePath { get; init; } = Path.GetFullPath(RelativePath);
+    public string AbsolutePath { get; } = Path.GetFullPath(RelativePath);
 
-    public string RelativePath { get; init; } = RelativePath;
+    public string NormalizedPath { get; } = RelativePath.Replace('\\', '/');
 
     public bool Exists()
     {

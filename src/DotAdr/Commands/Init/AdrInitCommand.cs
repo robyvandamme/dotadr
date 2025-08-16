@@ -23,7 +23,6 @@ internal class AdrInitCommand(
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(settings);
 
-        // Validate input using Spectre Validation: how does that work? Do in .ADR and bring in once clear.
         try
         {
             if (context.Name != "init")
@@ -36,7 +35,7 @@ internal class AdrInitCommand(
 
             var title = "Use Architectural Decision Records";
             var template = adrFactory.CreateDecisionTemplate();
-            var initialDecision = adrFactory.CreateDecisionRecord(template, title);
+            var initialDecision = adrFactory.CreateDecisionRecord(1, template, title);
             adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision);
             console.MarkupLine($"ADR directory {adrDirectoryPath.RelativePath} initialized");
         }
