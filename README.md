@@ -8,7 +8,7 @@ NOTE: only tested on MacOS.
 
 ### Initialize the ADR Directory
 
-Creates the ADR directory, adds the default template and a first decision record to the directory, and saves the ADR directory to the `dotadr.json` file.
+Creates the ADR directory, adds the default template and a first decision record to the directory, and saves the ADR directory to a `dotadr.json` file.
 
 ```text
 DESCRIPTION:
