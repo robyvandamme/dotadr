@@ -3,14 +3,13 @@
 using DotAdr.Commands;
 using DotAdr.Commands.Init;
 using DotAdr.Common;
-using DotAdr.Config;
 using Moq;
 using Serilog;
 using Shouldly;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
-namespace DotAdr.Tests.Commands;
+namespace DotAdr.Tests.Commands.Init;
 
 public class AdrInitCommandTests
 {

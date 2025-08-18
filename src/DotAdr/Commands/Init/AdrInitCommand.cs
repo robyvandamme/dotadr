@@ -1,7 +1,6 @@
 // Copyright © 2025 Roby Van Damme.
 
 using DotAdr.Common;
-using DotAdr.Config;
 using Serilog;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -30,13 +29,20 @@ internal class AdrInitCommand(
                 throw new DotAdrException($"Unsupported command name {context.Name}");
             }
 
+            // So, in case -o is not passed in we skip, otherwise we overwrite
             var adrDirectoryPath = new LocalDirectory(settings.Directory ?? "./doc/adr");
-            configurationService.SaveAdrConfiguration(adrDirectoryPath);
 
-            var title = "Use Architectural Decision Records";
+            // Pass in the directory as is. We normalize it in the configuration service
+            configurationService.SaveAdrConfiguration(adrDirectoryPath, settings.Overwrite); // TODO: pass in the overwrite flag
+
+            // Create the template
             var template = adrFactory.CreateDecisionTemplate();
+
+            // Create the initial record
+            var title = "Use Architectural Decision Records";
             var initialDecision = adrFactory.CreateDecisionRecord(1, template, title);
-            adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision);
+
+            adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision); // TODO: pass in overwrite flag
             console.MarkupLine($"ADR directory {adrDirectoryPath.RelativePath} initialized");
         }
 #pragma warning disable CA1031

@@ -3,7 +3,6 @@
 using System.Diagnostics;
 using DotAdr.Commands;
 using DotAdr.Commands.Init;
-using DotAdr.Config;
 using Serilog;
 using Spectre.Console.Cli;
 
@@ -31,7 +30,7 @@ internal static class CommandConfiguration
             config.Settings.Registrar.Register<IAdrFactory, AdrFactory>();
 
             config.AddCommand<AdrInitCommand>(name: "init")
-                .WithDescription("Initialize the ADR directory")
+                .WithDescription("Initialize the ADR directory.")
                 .WithExample("init")
                 .WithExample("init", "-d", "./doc/arch/adr");
         });

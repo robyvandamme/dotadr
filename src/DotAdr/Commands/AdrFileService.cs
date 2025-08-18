@@ -34,6 +34,8 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
         else
         {
+            // TODO: throw or not throw? I think we need to throw. Minimize issues.
+            // But, that might mean we have a config but no template or initial record....
             logger.Debug("Directory already exists: {Directory}", adrDirectory.AbsolutePath);
         }
 
@@ -46,6 +48,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
         else
         {
+            // TODO: throw or not throw? Minimize issues.
             logger.Debug("File already exists: {FilePath}", templateFilePath);
         }
 

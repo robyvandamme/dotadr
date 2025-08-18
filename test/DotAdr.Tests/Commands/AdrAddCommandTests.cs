@@ -3,7 +3,6 @@
 using DotAdr.Commands;
 using DotAdr.Commands.Init;
 using DotAdr.Common;
-using DotAdr.Config;
 using Moq;
 using Serilog;
 using Shouldly;

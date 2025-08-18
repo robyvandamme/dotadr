@@ -2,7 +2,7 @@
 
 using DotAdr.Common;
 
-namespace DotAdr.Config
+namespace DotAdr.Commands
 {
     internal interface IConfigurationService
     {
@@ -10,7 +10,8 @@ namespace DotAdr.Config
         /// Saves the ADR configuration.
         /// </summary>
         /// <param name="adrDirectory">The relative ADR directory path.</param>
-        void SaveAdrConfiguration(LocalDirectory adrDirectory);
+        /// <param name="overwriteConfiguration">Overwrite the config if it exists.</param>
+        void SaveAdrConfiguration(LocalDirectory adrDirectory, bool overwriteConfiguration);
 
         /// <summary>
         /// Gets DotBot config from the .bot directory.
