@@ -22,7 +22,8 @@ internal interface IAdrFileService
     void InitializeDirectory(
         LocalDirectory adrDirectory,
         string decisionTemplate,
-        DecisionRecord initialDecisionRecord);
+        DecisionRecord initialDecisionRecord,
+        bool overwriteFiles);
 
     /// <summary>
     /// Add a decision record to the specified directory.
@@ -30,5 +31,5 @@ internal interface IAdrFileService
     /// <param name="directory">The directory to use.</param>
     /// <param name="decisionRecord">The decision record to add.</param>
     /// <returns>The file name of the record.</returns>
-    string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord);
+    // string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord);
 }

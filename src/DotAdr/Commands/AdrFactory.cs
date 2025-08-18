@@ -40,7 +40,6 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
 
         // TODO: adapt to match new template
         
-        
         // TODO: we also need the decision record number here.
         var newDateString = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture);
 

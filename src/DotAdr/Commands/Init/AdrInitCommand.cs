@@ -33,16 +33,16 @@ internal class AdrInitCommand(
             var adrDirectoryPath = new LocalDirectory(settings.Directory ?? "./doc/adr");
 
             // Pass in the directory as is. We normalize it in the configuration service
-            configurationService.SaveAdrConfiguration(adrDirectoryPath, settings.Overwrite); // TODO: pass in the overwrite flag
+            configurationService.SaveAdrConfiguration(adrDirectoryPath, settings.Overwrite);
 
             // Create the template
             var template = adrFactory.CreateDecisionTemplate();
 
             // Create the initial record
             var title = "Use Architectural Decision Records";
-            var initialDecision = adrFactory.CreateDecisionRecord(1, template, title);
+            var initialDecision = adrFactory.CreateDecisionRecord(1, template, title); // TODO: use "001 here"
 
-            adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision); // TODO: pass in overwrite flag
+            adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision, settings.Overwrite); // TODO: pass in overwrite flag
             console.MarkupLine($"ADR directory {adrDirectoryPath.RelativePath} initialized");
         }
 #pragma warning disable CA1031
