@@ -1,6 +1,5 @@
 // Copyright © 2025 Roby Van Damme.
 
-using System.Text;
 using System.Text.Json;
 using DotAdr.Common;
 using Serilog;
@@ -29,7 +28,7 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
         {
             var config = new DotAdrConfig(adrDirectory.NormalizedPath);
             var jsonString = JsonSerializer.Serialize(config, _jsonSerializerOptions);
-            File.WriteAllText(ConfigFilePath, jsonString, Encoding.UTF8);
+            File.WriteAllText(ConfigFilePath, jsonString);
         }
         else
         {

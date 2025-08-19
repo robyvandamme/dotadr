@@ -29,7 +29,6 @@ internal class AdrInitCommand(
                 throw new DotAdrException($"Unsupported command name {context.Name}");
             }
 
-            // So, in case -o is not passed in we skip, otherwise we overwrite
             var adrDirectoryPath = new LocalDirectory(settings.Directory ?? "./doc/adr");
 
             // Pass in the directory as is. We normalize it in the configuration service
@@ -40,9 +39,9 @@ internal class AdrInitCommand(
 
             // Create the initial record
             var title = "Use Architectural Decision Records";
-            var initialDecision = adrFactory.CreateDecisionRecord(1, template, title); // TODO: use "001 here"
+            var initialDecision = adrFactory.CreateDecisionRecord(template, "001", title);
 
-            adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision, settings.Overwrite); // TODO: pass in overwrite flag
+            adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision, settings.Overwrite);
             console.MarkupLine($"ADR directory {adrDirectoryPath.RelativePath} initialized");
         }
 #pragma warning disable CA1031

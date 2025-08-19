@@ -2,6 +2,7 @@
 
 using System.Diagnostics;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using DotAdr.Common;
 using Serilog;
@@ -24,6 +25,42 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         ArgumentNullException.ThrowIfNull(nameof(initialDecisionRecord));
         ArgumentException.ThrowIfNullOrEmpty(nameof(decisionTemplate));
 
+        CreateDirectory(adrDirectory);
+
+        CreateTemplate(adrDirectory, decisionTemplate, overwriteFiles);
+
+        CreateInitialDecisionRecord(adrDirectory, initialDecisionRecord, overwriteFiles);
+
+        logger.MethodReturn(nameof(AdrFileService), nameof(InitializeDirectory));
+    }
+
+    public string GetTemplate(LocalDirectory adrDirectory)
+    {
+        logger.MethodStart(nameof(AdrFileService), nameof(GetTemplate));
+
+        ArgumentNullException.ThrowIfNull(adrDirectory);
+
+        logger.Debug("GetTemplate with directory {Directory}", adrDirectory.AbsolutePath);
+
+        var info = new DirectoryInfo(adrDirectory.AbsolutePath);
+        if (!info.Exists)
+        {
+            throw new DotAdrException($"The directory {adrDirectory.AbsolutePath} does not exist");
+        }
+
+        var templateFilePath = Path.Combine(adrDirectory.AbsolutePath, _templateName);
+        var fileInfo = new FileInfo(templateFilePath);
+        if (!fileInfo.Exists)
+        {
+            throw new DotAdrException($"The file {templateFilePath} does not exist");
+        }
+
+        var templateContent = File.ReadAllText(templateFilePath);
+        return templateContent;
+    }
+
+    private void CreateDirectory(LocalDirectory adrDirectory)
+    {
         var directoryInfo = new DirectoryInfo(adrDirectory.AbsolutePath);
         if (!directoryInfo.Exists)
         {
@@ -34,7 +71,10 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         {
             logger.Debug("Directory already exists: {Directory}", adrDirectory.AbsolutePath);
         }
+    }
 
+    private void CreateTemplate(LocalDirectory adrDirectory, string decisionTemplate, bool overwriteFiles)
+    {
         var templateFilePath = Path.Combine(adrDirectory.AbsolutePath, _templateName);
         var templateFileInfo = new FileInfo(templateFilePath);
         if (!templateFileInfo.Exists || overwriteFiles)
@@ -46,13 +86,9 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         {
             logger.Debug("File already exists: {FilePath}", templateFilePath);
         }
-
-        CreateInitialDecisionRecord(adrDirectory, initialDecisionRecord, overwriteFiles);
-
-        logger.MethodReturn(nameof(AdrFileService), nameof(InitializeDirectory));
     }
 
-    private static void CreateInitialDecisionRecord(
+    private void CreateInitialDecisionRecord(
         LocalDirectory adrDirectory,
         DecisionRecord initialDecisionRecord,
         bool overwriteFile)
@@ -94,31 +130,6 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         safe = Regex.Replace(safe, @"-+", "-");
 
         return safe;
-    }
-
-    public string GetTemplate(LocalDirectory adrDirectory)
-    {
-        logger.MethodStart(nameof(AdrFileService), nameof(GetTemplate));
-
-        ArgumentNullException.ThrowIfNull(adrDirectory);
-
-        logger.Debug("GetTemplate with directory {Directory}", adrDirectory.AbsolutePath);
-
-        var info = new DirectoryInfo(adrDirectory.AbsolutePath);
-        if (!info.Exists)
-        {
-            throw new DotAdrException($"The directory {adrDirectory.AbsolutePath} does not exist");
-        }
-
-        var templateFilePath = Path.Combine(adrDirectory.AbsolutePath, _templateName);
-        var fileInfo = new FileInfo(templateFilePath);
-        if (!fileInfo.Exists)
-        {
-            throw new DotAdrException($"The file {templateFilePath} does not exist");
-        }
-
-        var templateContent = File.ReadAllText(templateFilePath);
-        return templateContent;
     }
 
     // public string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord)

@@ -2,7 +2,6 @@
 
 using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 using DotAdr.Common;
 using Serilog;
 
@@ -34,30 +33,34 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return sb.ToString();
     }
 
-    public DecisionRecord CreateDecisionRecord(int id, string templateContent, string decisionTitle)
+    public DecisionRecord CreateDecisionRecord(string templateContent, string id, string decisionTitle)
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionRecord));
 
-        // TODO: adapt to match new template
-        
-        // TODO: we also need the decision record number here.
-        var newDateString = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture);
+        var templateVariables = new Dictionary<string, string>
+        {
+            ["ID"] = "001",
+            ["TITLE"] = decisionTitle,
+            ["DATE"] = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture),
+        };
 
-        // Replace the header (assumes the header is in Markdown format like "# Title")
-        var updatedContent = Regex.Replace(
-            templateContent,
-            @"^# .*$",
-            $"# {decisionTitle}",
-            RegexOptions.Multiline);
+        var decisionContent = ProcessTemplate(templateContent, templateVariables);
 
-        // Replace the date string (assuming it's in a format like "Date: YYYY-MM-DD")
-        updatedContent = Regex.Replace(
-            updatedContent,
-            @"Date:.*\d{4}-\d{2}-\d{2}",
-            $"Date: {newDateString}");
+        logger.MethodReturn(nameof(AdrFactory), nameof(CreateDecisionRecord), decisionContent);
 
-        logger.MethodReturn(nameof(AdrFactory), nameof(CreateDecisionRecord), updatedContent);
+        return new DecisionRecord(id, decisionTitle, decisionContent);
+    }
 
-        return new DecisionRecord(id, decisionTitle, updatedContent);
+    private static string ProcessTemplate(string template, Dictionary<string, string> variables)
+    {
+        foreach (var variable in variables)
+        {
+            template = template.Replace(
+                $"{{{{{variable.Key}}}}}",
+                variable.Value,
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        return template;
     }
 }
