@@ -61,7 +61,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         DecisionRecord initialDecisionRecord,
         bool overwriteFile)
     {
-        var safeTitle = SafeFileName(initialDecisionRecord.Title);
+        var safeTitle = MakeSafeFileName(initialDecisionRecord.Title);
         var fileName = $"{initialDecisionRecord.Id}-{safeTitle}.md";
         var filePath = Path.Combine(adrDirectory.AbsolutePath, fileName);
 
@@ -76,7 +76,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
     }
 
-    private static string SafeFileName(string title)
+    private static string MakeSafeFileName(string title)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
 
