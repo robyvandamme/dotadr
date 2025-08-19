@@ -24,6 +24,7 @@ public class AdrFactoryTests
             var factory = new AdrFactory(logger);
 
             var template = factory.CreateDecisionTemplate();
+
             var record = factory.CreateDecisionRecord(template, "005", "Decision Title");
 
             record.Id.ShouldBe("005");
