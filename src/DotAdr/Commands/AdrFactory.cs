@@ -39,7 +39,7 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
 
         var templateVariables = new Dictionary<string, string>
         {
-            ["ID"] = "001",
+            ["ID"] = id,
             ["TITLE"] = decisionTitle,
             ["DATE"] = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture),
         };
