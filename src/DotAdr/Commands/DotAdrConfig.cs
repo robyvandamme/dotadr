@@ -2,4 +2,4 @@
 
 namespace DotAdr.Commands;
 
-public record DotAdrConfig(string Directory);
+internal record DotAdrConfig(string Directory);
