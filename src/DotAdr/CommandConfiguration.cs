@@ -33,7 +33,7 @@ internal static class CommandConfiguration
                 .WithDescription("Initialize the ADR directory.")
                 .WithExample("init")
                 .WithExample("init", "-d", "./doc/arch/adr", "-o", "true")
-                .WithExample("init", "--debug", "true");
+                .WithExample("init", "--debug", "true", "--logfile", "log.txt");
         });
     }
 }

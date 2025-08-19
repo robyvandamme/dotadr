@@ -7,13 +7,13 @@ namespace DotAdr.Commands.Init;
 
 internal class AdrInitSettings : LogSettings
 {
-    [Description("The directory to initialize. Defaults to `./doc/adr`")]
+    [Description("The directory to initialize.")]
     [CommandOption("-d|--directory")]
     [DefaultValue("./doc/adr")]
     public string? Directory { get; init; }
 
-    [Description("Overwrite existing files? Defaults to false.")]
+    [Description("Whether to overwrite existing files.")]
     [CommandOption("-o|--overwrite")]
-    [DefaultValue(false)]
+    [DefaultValue("false")]
     public bool Overwrite { get; init; }
 }

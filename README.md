@@ -2,7 +2,7 @@
 
 .NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
-NOTE: only tested on MacOS.
+NOTE: only tested on MacOS so far.
 
 ## Features
 
@@ -19,14 +19,16 @@ USAGE:
 
 EXAMPLES:
     dotadr init
-    dotadr init -d ./doc/arch/adr
+    dotadr init -d ./doc/arch/adr -o true
+    dotadr init --debug true --logfile log.txt
 
 OPTIONS:
-    -h, --help         Prints help information                             
-        --debug        Enable debug logging for troubleshooting            
-        --logfile      The file to send the log output to                  
-    -d, --directory    The directory to initialize. Defaults to `./doc/adr`
-
+                       DEFAULT                                              
+    -h, --help                      Prints help information                 
+        --debug                     Enable debug logging for troubleshooting
+        --logfile                   The file to send the log output to      
+    -d, --directory    ./doc/adr    The directory to initialize             
+    -o, --overwrite    false        Whether to overwrite existing files     
 
 ```
 
@@ -54,7 +56,7 @@ The decision record that is added upon initialization looks like this:
 # 001 Use Architectural Decision Records
 
 * Status: Draft
-* Date: 2025-08-13
+* Date: 2025-08-19
 
 ## Context
 
