@@ -6,7 +6,6 @@ using Serilog;
 
 namespace DotAdr.Commands;
 
-/// <inheritdoc cref="IConfigurationService"/>
 internal class ConfigurationService(ILogger logger) : IConfigurationService
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
@@ -22,7 +21,6 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
 
         ArgumentNullException.ThrowIfNull(adrDirectory);
 
-        // FileInfo constructor automatically calls Path.GetFullPath() internally? So this should work across platforms...
         var fileInfo = new FileInfo(ConfigFilePath);
         if (!fileInfo.Exists || overwriteConfiguration)
         {
