@@ -1,4 +1,4 @@
-# DotADR
+# dotADR
 
 .NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
