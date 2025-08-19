@@ -27,7 +27,7 @@ public class ConfigurationServiceTests
         }
 
         [Fact]
-        public void Overwrites_When_Configuration_File_Already_Exists_And_Overwrite_True()
+        public void Overwrites_When_Configuration_File_Already_Exists_And_Overwrite_Is_True()
         {
             var service = new ConfigurationService(new Mock<ILogger>().Object);
             var adrDirectory = new LocalDirectory("test/adr");
@@ -45,7 +45,7 @@ public class ConfigurationServiceTests
         }
 
         [Fact]
-        public void Does_Not_Overwrite_When_Configuration_File_Already_Exists_And_Overwrite_False()
+        public void Does_Not_Overwrite_When_Configuration_File_Already_Exists_And_Overwrite_Is_False()
         {
             var service = new ConfigurationService(new Mock<ILogger>().Object);
             var adrDirectory = new LocalDirectory("test/adr");

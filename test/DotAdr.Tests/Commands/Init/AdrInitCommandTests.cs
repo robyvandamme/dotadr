@@ -18,13 +18,14 @@ public class AdrInitCommandTests
         [Fact]
         public void Creates_Configuration_And_Initializes_Directory()
         {
-            // var configDirectory = new LocalDirectory(".bot");
             var adrDirectory = new LocalDirectory("./doc/adr");
-
-            // configDirectory.EnsureDirectoryDeleted();
             adrDirectory.EnsureDirectoryDeleted();
 
             var configuration = new FileInfo("./dotadr.json");
+
+            configuration.Delete();
+            configuration.Refresh();
+
             var adrTemplate = new FileInfo("./doc/adr/template.md");
             var initialDecisionRecord = new FileInfo("./doc/adr/001-use-architectural-decision-records.md");
 
