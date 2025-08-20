@@ -1,5 +1,6 @@
 // Copyright © 2025 Roby Van Damme.
 
+using System.Globalization;
 using System.Text.RegularExpressions;
 using DotAdr.Common;
 using Serilog;
@@ -24,11 +25,64 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
 
         CreateDirectory(adrDirectory);
 
-        CreateTemplate(adrDirectory, decisionTemplate, overwriteFiles);
+        AddTemplate(adrDirectory, decisionTemplate, overwriteFiles);
 
-        CreateInitialDecisionRecord(adrDirectory, initialDecisionRecord, overwriteFiles);
+        AddInitialDecisionRecord(adrDirectory, initialDecisionRecord, overwriteFiles);
 
         logger.MethodReturn(nameof(AdrFileService), nameof(InitializeDirectory));
+    }
+
+    public string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord)
+    {
+        logger.MethodStart(nameof(AdrFileService), nameof(AddDecisionRecord));
+
+        ArgumentNullException.ThrowIfNull(directory);
+        ArgumentNullException.ThrowIfNull(decisionRecord);
+
+        logger.Debug("AddDecisionRecord in directory {Directory}", directory);
+
+        var info = new DirectoryInfo(directory.AbsolutePath);
+        if (!info.Exists)
+        {
+            throw new DotAdrException($"The directory {directory} does not exist");
+        }
+
+        // Create a file name friendly version of the title
+        var safeTitle = MakeSafeFileName(decisionRecord.Title);
+
+        var fileName = $"{decisionRecord.Id}-{safeTitle}.md";
+
+        // Create the new file path with the numbering prefix
+        var newFilePath = Path.Combine(directory.AbsolutePath, fileName);
+
+        // Write the updated content to the new file
+        File.WriteAllText(newFilePath, decisionRecord.Content);
+
+        return fileName;
+    }
+
+    public string GetNextRecordId(LocalDirectory localDirectory)
+    {
+        ArgumentNullException.ThrowIfNull(localDirectory);
+
+        // Get all existing markdown files that follow our naming convention
+        var files = Directory.GetFiles(localDirectory.AbsolutePath, "???-*.md")
+            .Select(Path.GetFileName)
+            .Where(file => file != null && Regex.IsMatch(file, @"^\d{3}-.*\.md$"))
+            .ToList();
+
+        if (files.Count == 0)
+        {
+            // No existing files, start with 001. this should not happen, unless you delete the initial decision record.
+            return "001";
+        }
+
+        // Extract the highest number and increment it
+        var highestNumber = files
+            .Select(f => int.Parse(f.AsSpan(0, 3), CultureInfo.InvariantCulture))
+            .Max();
+
+        return $"{highestNumber + 1:000}";
     }
 
     public string GetTemplate(LocalDirectory adrDirectory)
@@ -56,7 +110,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         return templateContent;
     }
 
-    private static void CreateInitialDecisionRecord(
+    private static void AddInitialDecisionRecord(
         LocalDirectory adrDirectory,
         DecisionRecord initialDecisionRecord,
         bool overwriteFile)
@@ -114,7 +168,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
     }
 
-    private void CreateTemplate(LocalDirectory adrDirectory, string decisionTemplate, bool overwriteFiles)
+    private void AddTemplate(LocalDirectory adrDirectory, string decisionTemplate, bool overwriteFiles)
     {
         var templateFilePath = Path.Combine(adrDirectory.AbsolutePath, _templateName);
         var templateFileInfo = new FileInfo(templateFilePath);

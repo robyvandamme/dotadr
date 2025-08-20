@@ -29,13 +29,14 @@ internal class AdrAddCommand(
                 throw new DotAdrException($"Unsupported command name {context.Name}");
             }
 
-            // var adrTitle = settings.Title;
-            // var config = configurationService.GetAdrConfiguration();
-            // var directory = new LocalDirectory(config.Directory);
-            // var template = adrFileService.GetTemplate(directory);
-            // var record = adrFactory.CreateDecisionRecord(template, adrTitle);
-            // var fileName = adrFileService.AddDecisionRecord(directory, record);
-            // console.MarkupLine($"{fileName} added to the {directory.RelativePath} directory");
+            var adrTitle = settings.Title;
+            var config = configurationService.GetDotAdrConfiguration();
+            var adrDirectory = new LocalDirectory(config.Directory);
+            var template = adrFileService.GetTemplate(adrDirectory);
+            var nextId = adrFileService.GetNextRecordId(adrDirectory);
+            var record = adrFactory.CreateDecisionRecord(template, nextId, adrTitle);
+            var fileName = adrFileService.AddDecisionRecord(adrDirectory, record);
+            console.MarkupLine($"{fileName} added to the {adrDirectory.RelativePath} directory");
         }
 #pragma warning disable CA1031
         catch (Exception e)

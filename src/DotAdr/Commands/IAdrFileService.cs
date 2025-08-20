@@ -13,4 +13,8 @@ internal interface IAdrFileService
         string decisionTemplate,
         DecisionRecord initialDecisionRecord,
         bool overwriteFiles);
+
+    string GetNextRecordId(LocalDirectory localDirectory);
+
+    string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord);
 }
