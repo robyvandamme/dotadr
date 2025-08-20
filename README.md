@@ -44,6 +44,33 @@ OPTIONS:
 
 ```
 
+### Add a New Decision Record
+
+Adds a new decision record in the configured ADR directory using the `template.md` template file.
+
+```text
+DESCRIPTION:
+Add a new decision record
+
+USAGE:
+    dotadr add [title] [OPTIONS]
+
+EXAMPLES:
+    dotadr add "Title of the new decision record"
+    dotadr add "Title of the new decision record" --debug true --logfile log.txt
+    dotadr new "Title of the new decision record"
+
+ARGUMENTS:
+    [title]    The title of the new decision record
+
+OPTIONS:
+    -h, --help       Prints help information                 
+        --debug      Enable debug logging for troubleshooting
+        --logfile    The file to send the log output to   
+
+```
+
+
 ## The ADR Template
 
 The default template is based on [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) and looks like this:
