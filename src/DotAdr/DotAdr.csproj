@@ -5,6 +5,21 @@
     <TargetFramework>net8.0</TargetFramework>
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>dotadr</ToolCommandName>
+    <Authors>Roby Van Damme</Authors>
+    <Copyright>Copyright © 2025 Roby Van Damme.</Copyright>
+    <PackageId>dotADR</PackageId>
+    <Product>dotADR</Product>
+    <Description>.NET Global Tool to create Architectural Decision Records in .NET solutions.</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/robyvandamme/dotadr</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/robyvandamme/dotadr</RepositoryUrl>
+    <ReleaseNotes>https://github.com/robyvandamme/dotadr/releases</ReleaseNotes>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,4 +43,15 @@
     <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="../../README.md" Pack="true" Visible="false" PackagePath="\"/>
+    <None Include="../../icon.png" Pack="true" Visible="false" PackagePath="\"/>
+    <None Include="../../LICENSE" Pack="true" Visible="false" PackagePath="\"/>
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+  
 </Project>

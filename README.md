@@ -4,6 +4,18 @@
 
 NOTE: only tested on MacOS so far.
 
+## Installation
+
+```shell
+dotnet tool install dotADR --prerelease
+```
+
+### Upgrading
+
+```shell
+dotnet tool update dotADR --prerelease
+```
+
 ## Features
 
 ### Initialize the ADR Directory
