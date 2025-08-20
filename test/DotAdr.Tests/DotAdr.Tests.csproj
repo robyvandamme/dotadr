@@ -37,4 +37,8 @@
     </AdditionalFiles>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DotAdr\DotAdr.csproj" />
+  </ItemGroup>
+
 </Project>
