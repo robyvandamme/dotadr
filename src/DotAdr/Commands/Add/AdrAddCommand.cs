@@ -1,0 +1,53 @@
+// Copyright © 2025 Roby Van Damme.
+
+using DotAdr.Common;
+using Serilog;
+using Spectre.Console;
+using Spectre.Console.Cli;
+
+namespace DotAdr.Commands.Add;
+
+internal class AdrAddCommand(
+    IAnsiConsole console,
+    ILogger logger,
+    IAdrFileService adrFileService,
+    IAdrFactory adrFactory,
+    IConfigurationService configurationService)
+    : Command<AdrAddSettings>
+{
+    public override int Execute(CommandContext context, AdrAddSettings settings)
+    {
+        logger.MethodStart(nameof(AdrAddCommand), nameof(Execute));
+
+        ArgumentNullException.ThrowIfNull(context);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        try
+        {
+            if (context.Name != "add")
+            {
+                throw new DotAdrException($"Unsupported command name {context.Name}");
+            }
+
+            // var adrTitle = settings.Title;
+            // var config = configurationService.GetAdrConfiguration();
+            // var directory = new LocalDirectory(config.Directory);
+            // var template = adrFileService.GetTemplate(directory);
+            // var record = adrFactory.CreateDecisionRecord(template, adrTitle);
+            // var fileName = adrFileService.AddDecisionRecord(directory, record);
+            // console.MarkupLine($"{fileName} added to the {directory.RelativePath} directory");
+        }
+#pragma warning disable CA1031
+        catch (Exception e)
+#pragma warning restore CA1031
+        {
+            logger.Error(e, "An error occured while trying to add the decision record");
+            console.WriteException(e, ExceptionFormats.ShortenEverything);
+            logger.MethodReturn(nameof(AdrAddCommand), nameof(Execute));
+            return 1;
+        }
+
+        logger.MethodReturn(nameof(AdrAddCommand), nameof(Execute));
+        return 0;
+    }
+}
