@@ -6,7 +6,7 @@ using Moq;
 using Serilog;
 using Shouldly;
 
-namespace DotAdr.Tests.Commands.Init;
+namespace DotAdr.Tests.Commands;
 
 public class AdrFactoryTests
 {

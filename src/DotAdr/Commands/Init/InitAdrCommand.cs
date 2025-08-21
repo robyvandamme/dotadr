@@ -7,17 +7,17 @@ using Spectre.Console.Cli;
 
 namespace DotAdr.Commands.Init;
 
-internal class AdrInitCommand(
+internal class InitAdrCommand(
     IAnsiConsole console,
     ILogger logger,
     IAdrFileService adrFileService,
     IAdrFactory adrFactory,
     IConfigurationService configurationService)
-    : Command<AdrInitSettings>
+    : Command<InitAdrSettings>
 {
-    public override int Execute(CommandContext context, AdrInitSettings settings)
+    public override int Execute(CommandContext context, InitAdrSettings settings)
     {
-        logger.MethodStart(nameof(AdrInitCommand), nameof(Execute));
+        logger.MethodStart(nameof(InitAdrCommand), nameof(Execute));
 
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(settings);
@@ -50,11 +50,11 @@ internal class AdrInitCommand(
         {
             logger.Error(e, "An error occured while trying to initialize the ADR directory");
             console.WriteException(e, ExceptionFormats.ShortenEverything);
-            logger.MethodReturn(nameof(AdrInitCommand), nameof(Execute));
+            logger.MethodReturn(nameof(InitAdrCommand), nameof(Execute));
             return 1;
         }
 
-        logger.MethodReturn(nameof(AdrInitCommand), nameof(Execute));
+        logger.MethodReturn(nameof(InitAdrCommand), nameof(Execute));
         return 0;
     }
 }

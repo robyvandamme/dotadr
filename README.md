@@ -2,15 +2,17 @@
 
 .NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
+[![Pre-release](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml)
+
 NOTE: only tested on MacOS so far.
 
-## Installation
+## Install
 
 ```shell
 dotnet tool install dotADR --prerelease
 ```
 
-### Upgrading
+### Upgrade
 
 ```shell
 dotnet tool update dotADR --prerelease
@@ -27,12 +29,12 @@ DESCRIPTION:
 Initialize the ADR directory
 
 USAGE:
-    dotadr init [OPTIONS]
+    dotnet dotadr init [OPTIONS]
 
 EXAMPLES:
-    dotadr init
-    dotadr init -d ./doc/arch/adr -o true
-    dotadr init --debug true --logfile log.txt
+    dotnet dotadr init
+    dotnet dotadr init -d ./doc/arch/adr -o true
+    dotnet dotadr init --debug true --logfile log.txt
 
 OPTIONS:
                        DEFAULT                                              
@@ -43,6 +45,34 @@ OPTIONS:
     -o, --overwrite    false        Whether to overwrite existing files     
 
 ```
+
+### Add a New Decision Record
+
+Adds a new decision record in the configured ADR directory using the `template.md` template file.
+
+```text
+DESCRIPTION:
+Add a new decision record
+
+USAGE:
+    dotnet dotadr add [title] [OPTIONS]
+    dotnet dotadr new [title] [OPTIONS]
+
+EXAMPLES:
+    dotnet dotadr add "Title of the new decision record"
+    dotnet dotadr add "Title of the new decision record" --debug true --logfile log.txt
+    dotnet dotadr new "Title of the new decision record"
+
+ARGUMENTS:
+    [title]    The title of the new decision record
+
+OPTIONS:
+    -h, --help       Prints help information                 
+        --debug      Enable debug logging for troubleshooting
+        --logfile    The file to send the log output to   
+
+```
+
 
 ## The ADR Template
 
