@@ -38,9 +38,10 @@ internal static class CommandConfiguration
             config.AddCommand<AddAdrCommand>(name: "add")
                 .WithAlias("new")
                 .WithDescription("Add a new decision record.")
-                .WithExample("add", "\"Title of the new decision record\"")
-                .WithExample("add", "\"Title of the new decision record\"", "--debug", "true", "--logfile", "log.txt")
-                .WithExample("new", "\"Title of the new decision record\"");
+                .WithExample("add", "\"Title of a New Decision Record\"")
+                .WithExample("add", "\"Title of a New Superseding Decision Record\"", "-s", "002")
+                .WithExample("add", "\"Title of Another New Decision Record\"", "--debug", "true", "--logfile", "log.txt")
+                .WithExample("new", "\"Title of a New Decision Record\"");
         });
     }
 }

@@ -35,8 +35,6 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return sb.ToString();
     }
 
-    // TODO: we can add the Superseded record as an optional parameter in here. That should be
-    // enough to handle the Supersedes section? 
     public DecisionRecord CreateDecisionRecord(
         string templateContent,
         string id,
@@ -101,7 +99,13 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return found ? string.Join(Environment.NewLine, lines) : content;
     }
 
-    private string ProcessTemplate(string template, Dictionary<string, string> variables)
+    private static bool ContainsPlaceholder(string line)
+    {
+        return line.Contains("{{", StringComparison.OrdinalIgnoreCase) &&
+               line.Contains("}}", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static string ProcessTemplate(string template, Dictionary<string, string> variables)
     {
         foreach (var variable in variables)
         {
@@ -128,11 +132,5 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         }
 
         return template;
-    }
-
-    private bool ContainsPlaceholder(string line)
-    {
-        return line.Contains("{{", StringComparison.OrdinalIgnoreCase) &&
-               line.Contains("}}", StringComparison.OrdinalIgnoreCase);
     }
 }
