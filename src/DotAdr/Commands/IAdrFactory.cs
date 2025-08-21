@@ -11,4 +11,9 @@ internal interface IAdrFactory
         string id,
         string decisionTitle,
         SupersededDecisionRecord? supersededDecisionRecord = null);
+
+    string UpdateSupersededDecisionContent(
+        SupersededDecisionRecord supersededDecisionRecord,
+        DecisionRecord supersedingRecord,
+        string supersedingFileName);
 }

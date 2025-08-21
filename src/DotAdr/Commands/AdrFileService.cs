@@ -123,7 +123,8 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
             markdownFiles.FirstOrDefault(o => Path.GetFileName(o).StartsWith(id, StringComparison.OrdinalIgnoreCase));
         if (supersededFile != null)
         {
-            var superseded = new SupersededDecisionRecord(id, Path.GetFileName(supersededFile));
+            var content = File.ReadAllText(supersededFile);
+            var superseded = new SupersededDecisionRecord(id, Path.GetFileName(supersededFile), content);
             logger.MethodReturn(nameof(AdrFileService), nameof(TryGetSupersededDecisionRecord), superseded);
             return superseded;
         }
@@ -132,8 +133,23 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         // and we can not find the superseded record, we throw for now. That seems like the easiest option.
         // We can move this to Spectre validation later on.
         logger.Debug("No file with ID {id} found in {@directory}", id, adrDirectory);
-        throw new DotAdrException(
-            $"A record with ID {id} could not be found in the directory {@adrDirectory}");
+        throw new DotAdrException($"A record with ID {id} could not be found in the directory {@adrDirectory}");
+    }
+
+    public void UpdateSupersedeDecisionRecord(
+        LocalDirectory adrDirectory,
+        SupersededDecisionRecord decisionRecord,
+        string updatedContent)
+    {
+        var filePath = Path.Combine(adrDirectory.AbsolutePath, decisionRecord.FileName);
+        var fileInfo = new FileInfo(filePath);
+        if (!fileInfo.Exists)
+        {
+            throw new DotAdrException($"There is no superseded record file at {fileInfo}");
+        }
+
+        logger.Debug("Writing template to {FilePath}", filePath);
+        File.WriteAllText(filePath, updatedContent);
     }
 
     private static void AddInitialDecisionRecord(

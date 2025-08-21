@@ -48,7 +48,8 @@ internal class AddAdrCommand(
 
             if (superseded != null)
             {
-                // TODO: append " - Superseded by [record.Id](filename) on Date" to the superseded record
+                var content = adrFactory.UpdateSupersededDecisionContent(superseded, record, fileName);
+                adrFileService.UpdateSupersedeDecisionRecord(adrDirectory, superseded, content);
             }
 
             console.MarkupLine($"{fileName} added to the {adrDirectory.RelativePath} directory");

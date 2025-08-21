@@ -66,6 +66,41 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return new DecisionRecord(id, decisionTitle, decisionContent);
     }
 
+    public string UpdateSupersededDecisionContent(
+        SupersededDecisionRecord supersededDecisionRecord,
+        DecisionRecord supersedingRecord,
+        string supersedingFileName)
+    {
+        if (supersededDecisionRecord.Content.Contains("* Status:", StringComparison.OrdinalIgnoreCase))
+        {
+            var appendText =
+                $" - Superseded by [{supersedingRecord.Id}]({supersedingFileName}) on {DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+
+            var updated = AppendToStatusLine(supersededDecisionRecord.Content, appendText);
+            return updated;
+        }
+
+        return supersededDecisionRecord.Content;
+    }
+
+    private static string AppendToStatusLine(string content, string appendText)
+    {
+        var lines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
+        var found = false;
+
+        for (int i = 0; i < lines.Length; i++)
+        {
+            if (lines[i].Contains("* Status:", StringComparison.OrdinalIgnoreCase))
+            {
+                lines[i] += appendText;
+                found = true;
+                break;
+            }
+        }
+
+        return found ? string.Join(Environment.NewLine, lines) : content;
+    }
+
     private string ProcessTemplate(string template, Dictionary<string, string> variables)
     {
         foreach (var variable in variables)
