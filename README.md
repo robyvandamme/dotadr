@@ -56,6 +56,7 @@ Add a new decision record
 
 USAGE:
     dotnet dotadr add [title] [OPTIONS]
+    dotnet dotadr new [title] [OPTIONS]
 
 EXAMPLES:
     dotnet dotadr add "Title of the new decision record"
