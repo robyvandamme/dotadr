@@ -73,11 +73,11 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
 
         if (files.Count == 0)
         {
-            // No existing files, start with 001. this should not happen, unless you delete the initial decision record.
+            // No existing files, start with 001. This should not happen, unless you delete the initial decision record.
             return "001";
         }
 
-        // Extract the highest number and increment it
+        // Extract the highest number
         var highestNumber = files
             .Select(f => int.Parse(f.AsSpan(0, 3), CultureInfo.InvariantCulture))
             .Max();
@@ -134,7 +134,6 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
 
-        // Replace invalid file name characters and spaces
         var safe = title.Trim();
 
         // Replace invalid characters with empty strings
