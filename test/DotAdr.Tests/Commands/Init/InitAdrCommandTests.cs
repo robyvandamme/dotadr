@@ -11,7 +11,7 @@ using Spectre.Console.Testing;
 
 namespace DotAdr.Tests.Commands.Init;
 
-public class AdrInitCommandTests
+public class InitAdrCommandTests
 {
     public class Execute
     {
@@ -40,10 +40,10 @@ public class AdrInitCommandTests
             var adrFactory = new AdrFactory(logger);
             var configurationService = new ConfigurationService(logger);
 
-            var command = new AdrInitCommand(console, logger, adrFileService, adrFactory, configurationService);
+            var command = new InitAdrCommand(console, logger, adrFileService, adrFactory, configurationService);
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
-            var settings = new AdrInitSettings();
+            var settings = new InitAdrSettings();
             var result = command.Execute(context, settings);
 
             result.ShouldBe(0);

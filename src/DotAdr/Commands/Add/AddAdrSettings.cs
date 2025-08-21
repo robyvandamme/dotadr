@@ -5,7 +5,7 @@ using Spectre.Console.Cli;
 
 namespace DotAdr.Commands.Add;
 
-internal class AdrAddSettings : AdrSettings
+internal class AddAdrSettings : AdrSettings
 {
     [Description("The title of the new decision record.")]
     [CommandArgument(0, "[title]")]

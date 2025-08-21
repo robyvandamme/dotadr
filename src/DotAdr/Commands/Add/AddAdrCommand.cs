@@ -7,17 +7,17 @@ using Spectre.Console.Cli;
 
 namespace DotAdr.Commands.Add;
 
-internal class AdrAddCommand(
+internal class AddAdrCommand(
     IAnsiConsole console,
     ILogger logger,
     IAdrFileService adrFileService,
     IAdrFactory adrFactory,
     IConfigurationService configurationService)
-    : Command<AdrAddSettings>
+    : Command<AddAdrSettings>
 {
-    public override int Execute(CommandContext context, AdrAddSettings settings)
+    public override int Execute(CommandContext context, AddAdrSettings settings)
     {
-        logger.MethodStart(nameof(AdrAddCommand), nameof(Execute));
+        logger.MethodStart(nameof(AddAdrCommand), nameof(Execute));
 
         ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(settings);
@@ -44,11 +44,11 @@ internal class AdrAddCommand(
         {
             logger.Error(e, "An error occured while trying to add the decision record");
             console.WriteException(e, ExceptionFormats.ShortenEverything);
-            logger.MethodReturn(nameof(AdrAddCommand), nameof(Execute));
+            logger.MethodReturn(nameof(AddAdrCommand), nameof(Execute));
             return 1;
         }
 
-        logger.MethodReturn(nameof(AdrAddCommand), nameof(Execute));
+        logger.MethodReturn(nameof(AddAdrCommand), nameof(Execute));
         return 0;
     }
 }

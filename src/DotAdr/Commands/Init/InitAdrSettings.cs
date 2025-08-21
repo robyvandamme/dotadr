@@ -5,7 +5,7 @@ using Spectre.Console.Cli;
 
 namespace DotAdr.Commands.Init;
 
-internal class AdrInitSettings : LogSettings
+internal class InitAdrSettings : LogSettings
 {
     [Description("The directory to initialize.")]
     [CommandOption("-d|--directory")]

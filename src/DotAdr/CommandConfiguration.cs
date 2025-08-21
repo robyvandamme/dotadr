@@ -30,12 +30,12 @@ internal static class CommandConfiguration
             config.Settings.Registrar.Register<IAdrFileService, AdrFileService>();
             config.Settings.Registrar.Register<IAdrFactory, AdrFactory>();
 
-            config.AddCommand<AdrInitCommand>(name: "init")
+            config.AddCommand<InitAdrCommand>(name: "init")
                 .WithDescription("Initialize the ADR directory.")
                 .WithExample("init")
                 .WithExample("init", "-d", "./doc/arch/adr", "-o", "true")
                 .WithExample("init", "--debug", "true", "--logfile", "log.txt");
-            config.AddCommand<AdrAddCommand>(name: "add")
+            config.AddCommand<AddAdrCommand>(name: "add")
                 .WithAlias("new")
                 .WithDescription("Add a new decision record.")
                 .WithExample("add", "\"Title of the new decision record\"")
