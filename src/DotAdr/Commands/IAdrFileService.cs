@@ -17,4 +17,6 @@ internal interface IAdrFileService
     string GetNextRecordId(LocalDirectory localDirectory);
 
     string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord);
+
+    SupersededDecisionRecord? TryGetSupersededDecisionRecord(string id, LocalDirectory adrDirectory);
 }

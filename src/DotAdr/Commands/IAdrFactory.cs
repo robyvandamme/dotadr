@@ -6,5 +6,9 @@ internal interface IAdrFactory
 {
     string CreateDecisionTemplate();
 
-    DecisionRecord CreateDecisionRecord(string templateContent, string id, string decisionTitle);
+    DecisionRecord CreateDecisionRecord(
+        string templateContent,
+        string id,
+        string decisionTitle,
+        SupersededDecisionRecord? supersededDecisionRecord = null);
 }

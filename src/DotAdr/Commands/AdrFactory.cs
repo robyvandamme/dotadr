@@ -20,6 +20,8 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         sb.AppendLine();
         sb.Append("* Date: {{DATE}} ");
         sb.AppendLine();
+        sb.Append("* Supersedes: {{SUPERSEDES}}");
+        sb.AppendLine();
         sb.AppendLine();
         sb.Append("## Context");
         sb.AppendLine();
@@ -33,7 +35,13 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return sb.ToString();
     }
 
-    public DecisionRecord CreateDecisionRecord(string templateContent, string id, string decisionTitle)
+    // TODO: we can add the Superseded record as an optional parameter in here. That should be
+    // enough to handle the Supersedes section? 
+    public DecisionRecord CreateDecisionRecord(
+        string templateContent,
+        string id,
+        string decisionTitle,
+        SupersededDecisionRecord? supersededDecisionRecord)
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionRecord));
 
@@ -44,6 +52,13 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
             ["DATE"] = DateOnly.FromDateTime(DateTime.Today).ToString("O", CultureInfo.InvariantCulture),
         };
 
+        if (supersededDecisionRecord != null)
+        {
+            templateVariables.Add(
+                "SUPERSEDES",
+                $"[{supersededDecisionRecord.Id}]({supersededDecisionRecord.FileName})");
+        }
+
         var decisionContent = ProcessTemplate(templateContent, templateVariables);
 
         logger.MethodReturn(nameof(AdrFactory), nameof(CreateDecisionRecord), decisionContent);
@@ -51,7 +66,7 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return new DecisionRecord(id, decisionTitle, decisionContent);
     }
 
-    private static string ProcessTemplate(string template, Dictionary<string, string> variables)
+    private string ProcessTemplate(string template, Dictionary<string, string> variables)
     {
         foreach (var variable in variables)
         {
@@ -61,6 +76,28 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
+        if (!variables.ContainsKey("SUPERSEDES"))
+        {
+            var lines = template.Split('\n');
+            var processedLines = new List<string>();
+            foreach (string line in lines)
+            {
+                // Skip lines that still contain placeholder tokens
+                if (!ContainsPlaceholder(line))
+                {
+                    processedLines.Add(line);
+                }
+            }
+
+            return string.Join('\n', processedLines);
+        }
+
         return template;
+    }
+
+    private bool ContainsPlaceholder(string line)
+    {
+        return line.Contains("{{", StringComparison.OrdinalIgnoreCase) &&
+               line.Contains("}}", StringComparison.OrdinalIgnoreCase);
     }
 }

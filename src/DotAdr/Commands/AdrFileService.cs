@@ -58,11 +58,14 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         // Write the updated content to the new file
         File.WriteAllText(newFilePath, decisionRecord.Content);
 
+        logger.MethodReturn(nameof(AdrFileService), nameof(AddDecisionRecord), fileName);
+
         return fileName;
     }
 
     public string GetNextRecordId(LocalDirectory localDirectory)
     {
+        // TODO: add logging
         ArgumentNullException.ThrowIfNull(localDirectory);
 
         // Get all existing markdown files that follow our naming convention
@@ -106,8 +109,31 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
             throw new DotAdrException($"The file {templateFilePath} does not exist");
         }
 
+        // TODO: add logging
         var templateContent = File.ReadAllText(templateFilePath);
         return templateContent;
+    }
+
+    public SupersededDecisionRecord? TryGetSupersededDecisionRecord(string id, LocalDirectory adrDirectory)
+    {
+        logger.MethodStart(nameof(AdrFileService), nameof(TryGetSupersededDecisionRecord));
+
+        var markdownFiles = Directory.GetFiles(adrDirectory.AbsolutePath, "*.md");
+        var supersededFile =
+            markdownFiles.FirstOrDefault(o => Path.GetFileName(o).StartsWith(id, StringComparison.OrdinalIgnoreCase));
+        if (supersededFile != null)
+        {
+            var superseded = new SupersededDecisionRecord(id, Path.GetFileName(supersededFile));
+            logger.MethodReturn(nameof(AdrFileService), nameof(TryGetSupersededDecisionRecord), superseded);
+            return superseded;
+        }
+
+        // If this method is called, which should only be in the case of an -s command option,
+        // and we can not find the superseded record, we throw for now. That seems like the easiest option.
+        // We can move this to Spectre validation later on.
+        logger.Debug("No file with ID {id} found in {@directory}", id, adrDirectory);
+        throw new DotAdrException(
+            $"A record with ID {id} could not be found in the directory {@adrDirectory}");
     }
 
     private static void AddInitialDecisionRecord(

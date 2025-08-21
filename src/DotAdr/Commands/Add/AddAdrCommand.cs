@@ -29,13 +29,28 @@ internal class AddAdrCommand(
                 throw new DotAdrException($"Unsupported command name {context.Name}");
             }
 
-            var adrTitle = settings.Title;
+            logger.Debug("Running {Command} with settings {@Settings}", nameof(AddAdrCommand), settings);
+
             var config = configurationService.GetDotAdrConfiguration();
             var adrDirectory = new LocalDirectory(config.Directory);
             var template = adrFileService.GetTemplate(adrDirectory);
             var nextId = adrFileService.GetNextRecordId(adrDirectory);
-            var record = adrFactory.CreateDecisionRecord(template, nextId, adrTitle);
+
+            SupersededDecisionRecord? superseded = null;
+
+            if (!string.IsNullOrWhiteSpace(settings.Supersedes))
+            {
+                superseded = adrFileService.TryGetSupersededDecisionRecord(settings.Supersedes, adrDirectory);
+            }
+
+            var record = adrFactory.CreateDecisionRecord(template, nextId, settings.Title, superseded);
             var fileName = adrFileService.AddDecisionRecord(adrDirectory, record);
+
+            if (superseded != null)
+            {
+                // TODO: append " - Superseded by [record.Id](filename) on Date" to the superseded record
+            }
+
             console.MarkupLine($"{fileName} added to the {adrDirectory.RelativePath} directory");
         }
 #pragma warning disable CA1031

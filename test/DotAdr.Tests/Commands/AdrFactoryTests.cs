@@ -25,7 +25,7 @@ public class AdrFactoryTests
 
             var template = factory.CreateDecisionTemplate();
 
-            var record = factory.CreateDecisionRecord(template, "005", "Decision Title");
+            var record = factory.CreateDecisionRecord(template, "005", "Decision Title", null);
 
             record.Id.ShouldBe("005");
             record.Title.ShouldBe("Decision Title");

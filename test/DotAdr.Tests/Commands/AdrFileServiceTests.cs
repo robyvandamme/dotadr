@@ -22,7 +22,7 @@ public class AdrFileServiceTests
 
             var factory = new AdrFactory(new Mock<ILogger>().Object);
             var template = factory.CreateDecisionTemplate();
-            var record = factory.CreateDecisionRecord(template, "002", "New decision record");
+            var record = factory.CreateDecisionRecord(template, "002", "New decision record", null);
             service.InitializeDirectory(directory, template, record, false);
 
             var info = new DirectoryInfo(directory.AbsolutePath);
