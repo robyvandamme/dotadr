@@ -4,7 +4,7 @@
 
 [![Pre-release](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml)
 
-NOTE: only tested on MacOS so far.
+NOTE: only tested on macOS so far.
 
 ## Install
 
@@ -59,25 +59,21 @@ USAGE:
     dotnet dotadr new [title] [OPTIONS]
 
 EXAMPLES:
-    dotnet dotadr add "Title of the new decision record"
-    dotnet dotadr add "Superseding Decision Record" -s 002
-    dotnet dotadr add "Title of the new decision record" --debug true --logfile log.txt
-    dotnet dotadr new "Title of the new decision record"
+    dotnet dotadr add "Implement Circuit Breaker Pattern for External Service Calls"
+    dotnet dotadr add "Separate Read and Write Data Models" -s 002
+    dotnet dotadr add "Use Database Per Service Pattern" --debug true --logfile log.txt
+    dotnet dotadr new "Implement Request Rate Limiting"
 
 ARGUMENTS:
     [title]    The title of the new decision record
 
 OPTIONS:
-    -h, --help          Prints help information                                 
-        --debug         Enable debug logging for troubleshooting                
-        --logfile       The file to send the log output to                      
-    -s, --supersedes    The ID of the decision record this decision record      
-                        supersedes                                              
-
-
+    -h, --help          Prints help information                                      
+        --debug         Enable debug logging for troubleshooting                     
+        --logfile       The file to send the log output to                           
+    -s, --supersedes    The ID of the decision record this decision record supersedes
 
 ```
-
 
 ## The ADR Template
 
@@ -123,7 +119,7 @@ You can choose to not include a variable, in that case it is simply ignored.
 
 ### Superseding a Decision Record
 
-In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` and the `"* Supersedes: {{SUPERSEDES}}"` sections in the template more or less intact.
+In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` and `"* Supersedes: {{SUPERSEDES}}"` sections in the template more or less intact.
 
 ```shell
 dotnet dotadr add "Superseding Decision Record" -s 002
@@ -140,5 +136,5 @@ When a record supersedes another record:
 ```
 
 ```markdown
-* Status: Accepted - Superseded by [077](077-the-superseding-decision.md) on 2025-08-21
+* Status: Accepted - Superseded by [077](077-the-superseding-decision.md) 2025-08-21
 ```

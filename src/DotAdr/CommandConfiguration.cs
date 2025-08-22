@@ -38,10 +38,10 @@ internal static class CommandConfiguration
             config.AddCommand<AddAdrCommand>(name: "add")
                 .WithAlias("new")
                 .WithDescription("Add a new decision record.")
-                .WithExample("add", "\"Title of a New Decision Record\"")
-                .WithExample("add", "\"Title of a New Superseding Decision Record\"", "-s", "002")
-                .WithExample("add", "\"Title of Another New Decision Record\"", "--debug", "true", "--logfile", "log.txt")
-                .WithExample("new", "\"Title of a New Decision Record\"");
+                .WithExample("add", "\"Implement Circuit Breaker Pattern for External Service Calls\"")
+                .WithExample("add", "\"Separate Read and Write Data Models\"", "-s", "002")
+                .WithExample("add", "\"Use Database Per Service Pattern\"", "--debug", "true", "--logfile", "log.txt")
+                .WithExample("new", "\"Implement Request Rate Limiting\"");
         });
     }
 }
