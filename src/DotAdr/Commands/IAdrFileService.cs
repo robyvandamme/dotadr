@@ -14,13 +14,13 @@ internal interface IAdrFileService
         DecisionRecord initialDecisionRecord,
         bool overwriteFiles);
 
-    string GetNextRecordId(LocalDirectory localDirectory);
+    string GetNextRecordId(LocalDirectory adrDirectory);
 
-    string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord);
+    string AddDecisionRecord(LocalDirectory adrDirectory, DecisionRecord decisionRecord);
 
-    SupersededDecisionRecord? TryGetSupersededDecisionRecord(string id, LocalDirectory adrDirectory);
+    SupersededDecisionRecord? TryFindSupersededDecisionRecord(string id, LocalDirectory adrDirectory);
 
-    void UpdateSupersedeDecisionRecord(
+    void SaveSupersedeDecisionRecord(
         LocalDirectory adrDirectory,
         SupersededDecisionRecord decisionRecord,
         string updatedContent);

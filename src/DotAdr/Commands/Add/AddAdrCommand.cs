@@ -40,7 +40,7 @@ internal class AddAdrCommand(
 
             if (!string.IsNullOrWhiteSpace(settings.Supersedes))
             {
-                superseded = adrFileService.TryGetSupersededDecisionRecord(settings.Supersedes, adrDirectory);
+                superseded = adrFileService.TryFindSupersededDecisionRecord(settings.Supersedes, adrDirectory);
             }
 
             var record = adrFactory.CreateDecisionRecord(template, nextId, settings.Title, superseded);
@@ -49,7 +49,7 @@ internal class AddAdrCommand(
             if (superseded != null)
             {
                 var content = adrFactory.UpdateSupersededDecisionContent(superseded, record, fileName);
-                adrFileService.UpdateSupersedeDecisionRecord(adrDirectory, superseded, content);
+                adrFileService.SaveSupersedeDecisionRecord(adrDirectory, superseded, content);
             }
 
             console.MarkupLine($"{fileName} added to the {adrDirectory.RelativePath} directory");

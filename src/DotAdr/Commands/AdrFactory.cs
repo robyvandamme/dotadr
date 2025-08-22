@@ -72,7 +72,7 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         if (supersededDecisionRecord.Content.Contains("* Status:", StringComparison.OrdinalIgnoreCase))
         {
             var appendText =
-                $" - Superseded by [{supersedingRecord.Id}]({supersedingFileName}) on {DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+                $" - Superseded by [{supersedingRecord.Id}]({supersedingFileName}) {DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
 
             var updated = AppendToStatusLine(supersededDecisionRecord.Content, appendText);
             return updated;
