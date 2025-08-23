@@ -10,11 +10,6 @@ namespace DotAdr.Tests.Commands;
 
 public class AdrFactoryTests
 {
-    public class CreateDecisionTemplate
-    {
-        // Not really anything I want to test here? Template looks OK....
-    }
-
     public class CreateDecisionRecord
     {
         [Fact]

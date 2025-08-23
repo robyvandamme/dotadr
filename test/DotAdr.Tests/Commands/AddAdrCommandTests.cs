@@ -11,7 +11,7 @@ using Shouldly;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
-namespace DotAdr.Tests.Commands.Add;
+namespace DotAdr.Tests.Commands;
 
 public class AddAdrCommandTests
 {

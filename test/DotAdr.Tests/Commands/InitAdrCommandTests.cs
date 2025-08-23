@@ -9,7 +9,7 @@ using Shouldly;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
-namespace DotAdr.Tests.Commands.Init;
+namespace DotAdr.Tests.Commands;
 
 public class InitAdrCommandTests
 {
