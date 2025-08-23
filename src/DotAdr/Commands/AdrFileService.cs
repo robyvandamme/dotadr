@@ -32,19 +32,19 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         logger.MethodReturn(nameof(AdrFileService), nameof(InitializeDirectory));
     }
 
-    public string AddDecisionRecord(LocalDirectory directory, DecisionRecord decisionRecord)
+    public string AddDecisionRecord(LocalDirectory adrDirectory, DecisionRecord decisionRecord)
     {
         logger.MethodStart(nameof(AdrFileService), nameof(AddDecisionRecord));
 
-        ArgumentNullException.ThrowIfNull(directory);
+        ArgumentNullException.ThrowIfNull(adrDirectory);
         ArgumentNullException.ThrowIfNull(decisionRecord);
 
-        logger.Debug("AddDecisionRecord in directory {Directory}", directory);
+        logger.Debug("AddDecisionRecord in directory {Directory}", adrDirectory);
 
-        var info = new DirectoryInfo(directory.AbsolutePath);
+        var info = new DirectoryInfo(adrDirectory.AbsolutePath);
         if (!info.Exists)
         {
-            throw new DotAdrException($"The directory {directory} does not exist");
+            throw new DotAdrException($"The directory {adrDirectory} does not exist");
         }
 
         // Create a file name friendly version of the title
@@ -53,20 +53,29 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         var fileName = $"{decisionRecord.Id}-{safeTitle}.md";
 
         // Create the new file path with the numbering prefix
-        var newFilePath = Path.Combine(directory.AbsolutePath, fileName);
+        var newFilePath = Path.Combine(adrDirectory.AbsolutePath, fileName);
 
         // Write the updated content to the new file
         File.WriteAllText(newFilePath, decisionRecord.Content);
 
+        logger.MethodReturn(nameof(AdrFileService), nameof(AddDecisionRecord), fileName);
+
         return fileName;
     }
 
-    public string GetNextRecordId(LocalDirectory localDirectory)
+    /// <summary>
+    /// Gets the next record ID based on the files ih the ADR directory.
+    /// </summary>
+    /// <param name="adrDirectory">The ADR directory. </param>
+    /// <returns>The next record id in the "xxx" format.</returns>
+    public string GetNextRecordId(LocalDirectory adrDirectory)
     {
-        ArgumentNullException.ThrowIfNull(localDirectory);
+        logger.MethodStart(nameof(AdrFileService), nameof(GetNextRecordId));
+
+        ArgumentNullException.ThrowIfNull(adrDirectory);
 
         // Get all existing markdown files that follow our naming convention
-        var files = Directory.GetFiles(localDirectory.AbsolutePath, "???-*.md")
+        var files = Directory.GetFiles(adrDirectory.AbsolutePath, "???-*.md")
             .Select(Path.GetFileName)
             .Where(file => file != null && Regex.IsMatch(file, @"^\d{3}-.*\.md$"))
             .ToList();
@@ -82,9 +91,17 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
             .Select(f => int.Parse(f.AsSpan(0, 3), CultureInfo.InvariantCulture))
             .Max();
 
+        logger.MethodReturn(nameof(AdrFileService), nameof(GetNextRecordId), highestNumber);
+
         return $"{highestNumber + 1:000}";
     }
 
+    /// <summary>
+    /// Gets the template content from the template.md file in the ADR directory.
+    /// </summary>
+    /// <param name="adrDirectory">The ADR directory.</param>
+    /// <returns>The template content string.</returns>
+    /// <exception cref="DotAdrException">When the file of directory does not exist.</exception>
     public string GetTemplate(LocalDirectory adrDirectory)
     {
         logger.MethodStart(nameof(AdrFileService), nameof(GetTemplate));
@@ -107,10 +124,63 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
 
         var templateContent = File.ReadAllText(templateFilePath);
+        logger.MethodReturn(nameof(AdrFileService), nameof(GetTemplate), templateContent);
         return templateContent;
     }
 
-    private static void AddInitialDecisionRecord(
+    /// <summary>
+    /// Tries to find the superseded decision record.
+    /// </summary>
+    /// <param name="id">The record to find.</param>
+    /// <param name="adrDirectory">The ADR directory.</param>
+    /// <returns>The <see cref="SupersededDecisionRecord"/> if found.</returns>
+    /// <exception cref="DotAdrException">When no record is found.</exception>
+    public SupersededDecisionRecord? TryFindSupersededDecisionRecord(string id, LocalDirectory adrDirectory)
+    {
+        logger.MethodStart(nameof(AdrFileService), nameof(TryFindSupersededDecisionRecord));
+
+        var markdownFiles = Directory.GetFiles(adrDirectory.AbsolutePath, "*.md");
+        var supersededFile =
+            markdownFiles.FirstOrDefault(o => Path.GetFileName(o).StartsWith(id, StringComparison.OrdinalIgnoreCase));
+        if (supersededFile != null)
+        {
+            var content = File.ReadAllText(supersededFile);
+            var superseded = new SupersededDecisionRecord(id, Path.GetFileName(supersededFile), content);
+            logger.MethodReturn(nameof(AdrFileService), nameof(TryFindSupersededDecisionRecord), superseded);
+            return superseded;
+        }
+
+        // If this method is called, which should only be in the case of an -s command option,
+        // and we can not find the superseded record, we throw for now. That seems like the easiest option.
+        // We can move this to Spectre validation later on.
+        logger.Debug("No file with ID {id} found in {@directory}", id, adrDirectory);
+        throw new DotAdrException($"A record with ID {id} could not be found in the directory {@adrDirectory}");
+    }
+
+    /// <summary>
+    /// Saves the superseded decision record.
+    /// </summary>
+    /// <param name="adrDirectory">The ADR directory.</param>
+    /// <param name="decisionRecord">The decision record.</param>
+    /// <param name="updatedContent">The updated content.</param>
+    /// <exception cref="DotAdrException">When the decision record does not exist.</exception>
+    public void SaveSupersedeDecisionRecord(
+        LocalDirectory adrDirectory,
+        SupersededDecisionRecord decisionRecord,
+        string updatedContent)
+    {
+        var filePath = Path.Combine(adrDirectory.AbsolutePath, decisionRecord.FileName);
+        var fileInfo = new FileInfo(filePath);
+        if (!fileInfo.Exists)
+        {
+            throw new DotAdrException($"There is no superseded record file at {fileInfo}");
+        }
+
+        logger.Debug("Writing template to {FilePath}", filePath);
+        File.WriteAllText(filePath, updatedContent);
+    }
+
+    private void AddInitialDecisionRecord(
         LocalDirectory adrDirectory,
         DecisionRecord initialDecisionRecord,
         bool overwriteFile)
@@ -130,8 +200,10 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
     }
 
-    private static string MakeSafeFileName(string title)
+    private string MakeSafeFileName(string title)
     {
+        logger.MethodStart(nameof(AdrFileService), nameof(MakeSafeFileName));
+
         ArgumentException.ThrowIfNullOrWhiteSpace(title);
 
         var safe = title.Trim();
@@ -149,6 +221,8 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
 
         // Remove multiple consecutive dashes
         safe = Regex.Replace(safe, @"-+", "-");
+
+        logger.MethodReturn(nameof(AdrFileService), nameof(MakeSafeFileName), safe);
 
         return safe;
     }

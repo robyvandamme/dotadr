@@ -9,7 +9,7 @@ using Shouldly;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
-namespace DotAdr.Tests.Commands.Init;
+namespace DotAdr.Tests.Commands;
 
 public class InitAdrCommandTests
 {
@@ -56,6 +56,29 @@ public class InitAdrCommandTests
             configuration.Exists.ShouldBeTrue();
             adrTemplate.Exists.ShouldBeTrue();
             initialDecisionRecord.Exists.ShouldBeTrue();
+        }
+
+        [Fact]
+        public void Catches_Exceptions_And_Returns_Failure_Result()
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var logger = new Mock<ILogger>().Object;
+            var adrFileService = new AdrFileService(logger);
+            var adrFactory = new AdrFactory(logger);
+            var configurationService = new Mock<IConfigurationService>();
+
+            configurationService.Setup(c => c.SaveAdrConfiguration(It.IsAny<LocalDirectory>(), It.IsAny<bool>()))
+                .Throws<DotAdrException>();
+
+            var command = new InitAdrCommand(console, logger, adrFileService, adrFactory, configurationService.Object);
+            var remainingArguments = new Mock<IRemainingArguments>();
+            var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
+            var settings = new InitAdrSettings();
+            var result = command.Execute(context, settings);
+
+            result.ShouldBe(1);
+            console.Output.ShouldContain("DotAdrException");
         }
     }
 }

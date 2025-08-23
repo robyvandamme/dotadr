@@ -59,7 +59,7 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
             throw new DotAdrException($"ADR configuration directory value at {ConfigFilePath} is null or empty");
         }
 
-        logger.MethodReturn(nameof(ConfigurationService), nameof(GetDotAdrConfiguration));
+        logger.MethodReturn(nameof(ConfigurationService), nameof(GetDotAdrConfiguration), config);
 
         return config;
     }

@@ -10,11 +10,6 @@ namespace DotAdr.Tests.Commands;
 
 public class AdrFactoryTests
 {
-    public class CreateDecisionTemplate
-    {
-        // Not really anything I want to test here? Template looks OK....
-    }
-
     public class CreateDecisionRecord
     {
         [Fact]
@@ -25,7 +20,7 @@ public class AdrFactoryTests
 
             var template = factory.CreateDecisionTemplate();
 
-            var record = factory.CreateDecisionRecord(template, "005", "Decision Title");
+            var record = factory.CreateDecisionRecord(template, "005", "Decision Title", null);
 
             record.Id.ShouldBe("005");
             record.Title.ShouldBe("Decision Title");

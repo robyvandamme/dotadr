@@ -10,4 +10,8 @@ internal class AddAdrSettings : AdrSettings
     [Description("The title of the new decision record.")]
     [CommandArgument(0, "[title]")]
     public required string Title { get; set; }
+
+    [Description("The ID of the decision record this decision record supersedes.")]
+    [CommandOption("-s|--supersedes")]
+    public string? Supersedes { get; set; }
 }
