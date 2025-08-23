@@ -10,6 +10,7 @@ on:
       - '!doc/**'
       - '!.github/workflows/**'
       - '!GitVersion.yml'
+      - '!.config/**'
   workflow_dispatch:
 
 permissions:
