@@ -4,8 +4,6 @@
 
 [![Pre-release](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml)
 
-NOTE: only tested on macOS so far.
-
 ## Install
 
 ```shell
