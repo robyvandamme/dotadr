@@ -9,15 +9,8 @@
 ## Install
 
 ```shell
-dotnet tool install dotADR --prerelease
+dotnet tool install dotADR
 ```
-
-### Upgrade
-
-```shell
-dotnet tool update dotADR --prerelease
-```
-
 ## Features
 
 ### Initialize the ADR Directory
