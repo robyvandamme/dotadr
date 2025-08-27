@@ -2,22 +2,15 @@
 
 .NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
+[![Release](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml)
+[![NuGet Version](https://img.shields.io/nuget/v/dotADR?color=004D81)](https://www.nuget.org/packages/dotADR/)
 [![Pre-release](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml)
-
-NOTE: only tested on macOS so far.
 
 ## Install
 
 ```shell
-dotnet tool install dotADR --prerelease
+dotnet tool install dotADR
 ```
-
-### Upgrade
-
-```shell
-dotnet tool update dotADR --prerelease
-```
-
 ## Features
 
 ### Initialize the ADR Directory
