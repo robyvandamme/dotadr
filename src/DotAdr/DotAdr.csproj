@@ -25,11 +25,11 @@
   <ItemGroup>
     <PackageReference Include="Roslynator.Analyzers" Version="4.14.0" PrivateAssets="All" />
     <PackageReference Include="Roslynator.Formatting.Analyzers" Version="4.14.0" PrivateAssets="All" />
-    <PackageReference Include="Serilog" Version="4.3.0"/>
-    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
-    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
-    <PackageReference Include="Spectre.Console.Cli" Version="0.50.0"/>
-    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" PrivateAssets="All"/>
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="Spectre.Console.Cli" Version="0.51.1" />
+    <PackageReference Include="StyleCop.Analyzers.Unstable" Version="1.2.0.556" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,14 +39,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="DotAdr.Tests"/>
-    <InternalsVisibleTo Include="DynamicProxyGenAssembly2"/>
+    <InternalsVisibleTo Include="DotAdr.Tests" />
+    <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="../../README.md" Pack="true" Visible="false" PackagePath="\"/>
-    <None Include="../../icon.png" Pack="true" Visible="false" PackagePath="\"/>
-    <None Include="../../LICENSE" Pack="true" Visible="false" PackagePath="\"/>
+    <None Include="../../README.md" Pack="true" Visible="false" PackagePath="\" />
+    <None Include="../../icon.png" Pack="true" Visible="false" PackagePath="\" />
+    <None Include="../../LICENSE" Pack="true" Visible="false" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
