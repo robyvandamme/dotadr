@@ -1,6 +1,6 @@
 # dotADR
 
-.NET Global Tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
+.NET tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
 [![Release](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/dotADR?color=004D81)](https://www.nuget.org/packages/dotADR/)
