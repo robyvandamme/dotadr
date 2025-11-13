@@ -15,7 +15,7 @@ internal class AddAdrCommand(
     IConfigurationService configurationService)
     : Command<AddAdrSettings>
 {
-    public override int Execute(CommandContext context, AddAdrSettings settings)
+    public override int Execute(CommandContext context, AddAdrSettings settings, CancellationToken cancellationToken)
     {
         logger.MethodStart(nameof(AddAdrCommand), nameof(Execute));
 

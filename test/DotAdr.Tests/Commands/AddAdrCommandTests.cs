@@ -33,7 +33,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings { Overwrite = true };
-            command.Execute(context, settings);
+            command.Execute(context, settings, CancellationToken.None);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
             var settings = new AddAdrSettings { Title = "New Decision Record" };
-            var result = command.Execute(context, settings);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
             console.Output.ShouldContain("new-decision-record.md added to the ./doc/adr directory");
@@ -95,7 +95,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
             var settings = new AddAdrSettings { Title = "New Decision Record", Supersedes = "001" };
-            var result = command.Execute(context, settings);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
             console.Output.ShouldContain("new-decision-record.md added to the ./doc/adr directory");
@@ -137,7 +137,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
             var settings = new AddAdrSettings { Title = "New Decision Record" };
-            var result = command.Execute(context, settings);
+            var result = command.Execute(context, settings, CancellationToken.None);
             result.ShouldBe(1);
             console.Output.ShouldContain("DotAdrException");
         }
