@@ -44,7 +44,7 @@ public class InitAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings();
-            var result = command.Execute(context, settings);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
             console.Output.ShouldContain("ADR directory ./doc/adr initialized");
@@ -75,7 +75,7 @@ public class InitAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings();
-            var result = command.Execute(context, settings);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(1);
             console.Output.ShouldContain("DotAdrException");
