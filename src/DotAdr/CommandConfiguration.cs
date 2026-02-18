@@ -34,6 +34,7 @@ internal static class CommandConfiguration
                 .WithDescription("Initialize the ADR directory.")
                 .WithExample("init")
                 .WithExample("init", "-d", "./doc/arch/adr", "-o", "true")
+                .WithExample("init", "-t", "./doc/templates/adr-template.md")
                 .WithExample("init", "--debug", "true", "--logfile", "log.txt");
             config.AddCommand<AddAdrCommand>(name: "add")
                 .WithAlias("new")
