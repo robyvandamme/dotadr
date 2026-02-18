@@ -22,20 +22,22 @@ DESCRIPTION:
 Initialize the ADR directory
 
 USAGE:
-    dotnet dotadr init [OPTIONS]
+    dotadr init [OPTIONS]
 
 EXAMPLES:
-    dotnet dotadr init
-    dotnet dotadr init -d ./doc/arch/adr -o true
-    dotnet dotadr init --debug true --logfile log.txt
+    dotadr init
+    dotadr init -d ./doc/arch/adr -o true
+    dotadr init -t ./doc/templates/adr-template.md
+    dotadr init --debug true --logfile log.txt
 
 OPTIONS:
-                       DEFAULT                                              
-    -h, --help                      Prints help information                 
-        --debug                     Enable debug logging for troubleshooting
-        --logfile                   The file to send the log output to      
-    -d, --directory    ./doc/adr    The directory to initialize             
-    -o, --overwrite    false        Whether to overwrite existing files     
+                       DEFAULT                                                             
+    -h, --help                      Prints help information                                
+        --debug                     Enable debug logging for troubleshooting               
+        --logfile                   The file to send the log output to                     
+    -d, --directory    ./doc/adr    The directory to initialize                            
+    -t, --template                  Path to a custom template to use for the initialization
+    -o, --overwrite    false        Whether to overwrite existing files                    
 
 ```
 
