@@ -56,6 +56,10 @@ public class InitAdrCommandTests
             configuration.Exists.ShouldBeTrue();
             adrTemplate.Exists.ShouldBeTrue();
             initialDecisionRecord.Exists.ShouldBeTrue();
+
+            var recordContent = File.ReadAllText(initialDecisionRecord.FullName);
+            recordContent.ShouldContain("# 001 Use Architectural Decision Records");
+            recordContent.ShouldContain("## Consequences");
         }
 
         [Fact]
