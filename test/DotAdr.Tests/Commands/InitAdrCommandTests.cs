@@ -59,6 +59,56 @@ public class InitAdrCommandTests
         }
 
         [Fact]
+        public void Initializes_Directory_With_Custom_Template()
+        {
+            var adrDirectory = new LocalDirectory("./doc/adr-custom");
+            adrDirectory.EnsureDirectoryDeleted();
+
+            var customTemplateFile = new FileInfo("./custom-template.md");
+            var customContent =
+                "# {{ID}} {{TITLE}}\n\nCustom Template Content\n\n* Status: {{STATUS}}\n* Date: {{DATE}}";
+            File.WriteAllText(customTemplateFile.FullName, customContent);
+
+            var configuration = new FileInfo("./dotadr.json");
+            configuration.Delete();
+
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var logger = new Mock<ILogger>().Object;
+            var adrFileService = new AdrFileService(logger);
+            var adrFactory = new AdrFactory(logger);
+            var configurationService = new ConfigurationService(logger);
+
+            var command = new InitAdrCommand(console, logger, adrFileService, adrFactory, configurationService);
+            var remainingArguments = new Mock<IRemainingArguments>();
+            var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
+            var settings = new InitAdrSettings
+            {
+                Directory = adrDirectory.RelativePath, TemplatePath = customTemplateFile.FullName,
+            };
+
+            var result = command.Execute(context, settings, CancellationToken.None);
+
+            result.ShouldBe(0);
+
+            var adrTemplate = new FileInfo(Path.Combine(adrDirectory.AbsolutePath, "template.md"));
+            adrTemplate.Exists.ShouldBeTrue();
+            File.ReadAllText(adrTemplate.FullName).ShouldBe(customContent);
+
+            var initialDecisionRecord = new FileInfo(
+                Path.Combine(adrDirectory.AbsolutePath, "001-use-architectural-decision-records.md"));
+            initialDecisionRecord.Exists.ShouldBeTrue();
+            var recordContent = File.ReadAllText(initialDecisionRecord.FullName);
+            recordContent.ShouldContain("Custom Template Content");
+            recordContent.ShouldContain("# 001 Use Architectural Decision Records");
+
+            // Cleanup
+            adrDirectory.EnsureDirectoryDeleted();
+            customTemplateFile.Delete();
+            configuration.Delete();
+        }
+
+        [Fact]
         public void Catches_Exceptions_And_Returns_Failure_Result()
         {
             using var console = new TestConsole();

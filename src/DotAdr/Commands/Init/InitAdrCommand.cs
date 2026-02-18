@@ -35,7 +35,9 @@ internal class InitAdrCommand(
             configurationService.SaveAdrConfiguration(adrDirectoryPath, settings.Overwrite);
 
             // Create the template
-            var template = adrFactory.CreateDecisionTemplate();
+            var template = string.IsNullOrEmpty(settings.TemplatePath)
+                ? adrFactory.CreateDecisionTemplate()
+                : File.ReadAllText(settings.TemplatePath);
 
             // Create the initial record
             var title = "Use Architectural Decision Records";
