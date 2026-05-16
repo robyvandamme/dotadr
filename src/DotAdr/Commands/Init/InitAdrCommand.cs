@@ -15,7 +15,7 @@ internal class InitAdrCommand(
     IConfigurationService configurationService)
     : Command<InitAdrSettings>
 {
-    public override int Execute(CommandContext context, InitAdrSettings settings, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, InitAdrSettings settings, CancellationToken cancellationToken)
     {
         logger.MethodStart(nameof(InitAdrCommand), nameof(Execute));
 
