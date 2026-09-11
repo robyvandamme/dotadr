@@ -11,6 +11,7 @@ on:
       - '!.github/workflows/**'
       - '!GitVersion.yml'
       - '!.config/**'
+      - '!AGENTS.md'
   workflow_dispatch:
 
 permissions:

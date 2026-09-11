@@ -9,6 +9,7 @@ on:
       - '!doc/**'
       - '!.github/workflows/**'
       - '!.config/**'
+      - '!AGENTS.md'
   workflow_dispatch:
 
 jobs:
