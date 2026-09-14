@@ -51,4 +51,32 @@ public class AddAdrSettingsTests
 
         result.Successful.ShouldBeTrue();
     }
+
+    [Fact]
+    public void Validate_Should_Return_Error_When_Title_Is_Not_Provided()
+    {
+        // Arrange
+        var settings = new AddAdrSettings { Title = null!, };
+
+        // Act
+        var result = settings.Validate();
+
+        // Assert
+        result.Successful.ShouldBeFalse();
+        result.Message.ShouldBe("The title is required.");
+    }
+
+    [Fact]
+    public void Validate_Should_Return_Error_When_Title_Is_Whitespace()
+    {
+        // Arrange
+        var settings = new AddAdrSettings { Title = "   ", };
+
+        // Act
+        var result = settings.Validate();
+
+        // Assert
+        result.Successful.ShouldBeFalse();
+        result.Message.ShouldBe("The title is required.");
+    }
 }
