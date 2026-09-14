@@ -99,12 +99,6 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         return found ? string.Join(Environment.NewLine, lines) : content;
     }
 
-    private static bool ContainsPlaceholder(string line)
-    {
-        return line.Contains("{{", StringComparison.OrdinalIgnoreCase) &&
-               line.Contains("}}", StringComparison.OrdinalIgnoreCase);
-    }
-
     private static string ProcessTemplate(string template, Dictionary<string, string> variables)
     {
         foreach (var variable in variables)
@@ -119,10 +113,10 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         {
             var lines = template.Split('\n');
             var processedLines = new List<string>();
-            foreach (string line in lines)
+            foreach (var line in lines)
             {
-                // Skip lines that still contain placeholder tokens
-                if (!ContainsPlaceholder(line))
+                // Remove any line containing the unresolved supersedes token.
+                if (!line.Contains("{{SUPERSEDES}}", StringComparison.InvariantCultureIgnoreCase))
                 {
                     processedLines.Add(line);
                 }
