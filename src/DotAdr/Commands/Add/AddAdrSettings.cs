@@ -9,7 +9,7 @@ namespace DotAdr.Commands.Add;
 internal class AddAdrSettings : AdrSettings
 {
     [Description("The title of the new decision record.")]
-    [CommandArgument(0, "[title]")]
+    [CommandArgument(0, "<title>")]
     public required string Title { get; set; }
 
     [Description("The ID of the decision record this decision record supersedes.")]
@@ -22,6 +22,11 @@ internal class AddAdrSettings : AdrSettings
 
     public override ValidationResult Validate()
     {
+        if (string.IsNullOrWhiteSpace(Title))
+        {
+            return ValidationResult.Error("The title is required.");
+        }
+
         if (!string.IsNullOrEmpty(TemplatePath) && !File.Exists(TemplatePath))
         {
             return ValidationResult.Error($"The template path '{TemplatePath}' does not exist.");
