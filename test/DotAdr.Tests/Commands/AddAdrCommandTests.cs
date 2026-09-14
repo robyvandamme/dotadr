@@ -143,6 +143,40 @@ public class AddAdrCommandTests
         }
 
         [Fact]
+        public void Returns_Success_When_Title_Contains_Square_Brackets()
+        {
+            var adrDirectory = new LocalDirectory(
+                Path.Combine(Path.GetTempPath(), $"dotadr-{Guid.NewGuid():N}"));
+            adrDirectory.EnsureFileCreated("template.md", "# {{ID}} {{TITLE}}");
+
+            try
+            {
+                using var console = new TestConsole();
+                console.EmitAnsiSequences = false;
+                var logger = new Mock<ILogger>().Object;
+                var adrFileService = new AdrFileService(logger);
+                var adrFactory = new AdrFactory(logger);
+                var configurationService = new Mock<IConfigurationService>();
+                configurationService.Setup(c => c.GetDotAdrConfiguration())
+                    .Returns(new DotAdrConfig(adrDirectory.RelativePath));
+
+                var command = new AddAdrCommand(console, logger, adrFileService, adrFactory, configurationService.Object);
+                var remainingArguments = new Mock<IRemainingArguments>();
+                var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
+                var settings = new AddAdrSettings { Title = "Use ILogger[T]" };
+
+                var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+
+                File.Exists(Path.Combine(adrDirectory.AbsolutePath, "001-use-ilogger[t].md")).ShouldBeTrue();
+                result.ShouldBe(0);
+            }
+            finally
+            {
+                adrDirectory.EnsureDirectoryDeleted();
+            }
+        }
+
+        [Fact]
         public void Adds_New_Decision_Record_With_Custom_Template()
         {
             var adrDirectory = new LocalDirectory("./doc/adr");

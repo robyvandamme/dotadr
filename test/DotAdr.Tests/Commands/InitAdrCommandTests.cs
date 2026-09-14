@@ -134,5 +134,44 @@ public class InitAdrCommandTests
             result.ShouldBe(1);
             console.Output.ShouldContain("DotAdrException");
         }
+
+        [Fact]
+        public void Returns_Success_When_Directory_Path_Contains_Square_Brackets()
+        {
+            var adrDirectory = new LocalDirectory(
+                Path.Combine(Path.GetTempPath(), $"dotadr-[adr]-{Guid.NewGuid():N}"));
+            var configurationService = new Mock<IConfigurationService>();
+
+            try
+            {
+                using var console = new TestConsole();
+                console.EmitAnsiSequences = false;
+                var logger = new Mock<ILogger>().Object;
+                var adrFileService = new AdrFileService(logger);
+                var adrFactory = new AdrFactory(logger);
+
+                var command = new InitAdrCommand(
+                    console,
+                    logger,
+                    adrFileService,
+                    adrFactory,
+                    configurationService.Object);
+                var remainingArguments = new Mock<IRemainingArguments>();
+                var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
+                var settings = new InitAdrSettings { Directory = adrDirectory.RelativePath, Overwrite = true };
+
+                var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+
+                File.Exists(Path.Combine(adrDirectory.AbsolutePath, "template.md")).ShouldBeTrue();
+                File.Exists(
+                        Path.Combine(adrDirectory.AbsolutePath, "001-use-architectural-decision-records.md"))
+                    .ShouldBeTrue();
+                result.ShouldBe(0);
+            }
+            finally
+            {
+                adrDirectory.EnsureDirectoryDeleted();
+            }
+        }
     }
 }
