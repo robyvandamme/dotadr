@@ -97,16 +97,32 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
     }
 
     /// <summary>
-    /// Gets the template content from the template.md file in the ADR directory.
+    /// Gets the template content from a custom path or from template.md in the ADR directory.
     /// </summary>
     /// <param name="adrDirectory">The ADR directory.</param>
+    /// <param name="templatePath">Optional custom template path. When omitted, template.md in the ADR directory is used.</param>
     /// <returns>The template content string.</returns>
-    /// <exception cref="DotAdrException">When the file of directory does not exist.</exception>
-    public string GetTemplate(LocalDirectory adrDirectory)
+    /// <exception cref="DotAdrException">When the file or directory does not exist.</exception>
+    public string GetTemplate(LocalDirectory adrDirectory, string? templatePath = null)
     {
         logger.MethodStart(nameof(AdrFileService), nameof(GetTemplate));
 
         ArgumentNullException.ThrowIfNull(adrDirectory);
+
+        if (!string.IsNullOrWhiteSpace(templatePath))
+        {
+            logger.Debug("GetTemplate with custom path {TemplatePath}", templatePath);
+
+            var customFileInfo = new FileInfo(templatePath);
+            if (!customFileInfo.Exists)
+            {
+                throw new DotAdrException($"The file {templatePath} does not exist");
+            }
+
+            var customTemplateContent = File.ReadAllText(templatePath);
+            logger.MethodReturn(nameof(AdrFileService), nameof(GetTemplate), customTemplateContent);
+            return customTemplateContent;
+        }
 
         logger.Debug("GetTemplate with directory {Directory}", adrDirectory.AbsolutePath);
 

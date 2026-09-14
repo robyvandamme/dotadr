@@ -52,5 +52,43 @@ public class AdrFileServiceTests
             template.ShouldNotBeEmpty();
             template.ShouldContain("Template Content");
         }
+
+        [Fact]
+        public void Returns_Custom_Template_When_Path_Is_Provided()
+        {
+            var directory = new LocalDirectory("adr");
+            directory.EnsureDirectoryDeleted();
+
+            var service = new AdrFileService(new Mock<ILogger>().Object);
+            service.InitializeDirectory(
+                directory,
+                "Default Template Content",
+                new DecisionRecord("001", "title", "no content"),
+                false);
+
+            var customTemplateFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString(), "custom-template.md");
+            Directory.CreateDirectory(Path.GetDirectoryName(customTemplateFile)!);
+            File.WriteAllText(customTemplateFile, "Custom Template Content");
+
+            try
+            {
+                var template = service.GetTemplate(directory, customTemplateFile);
+                template.ShouldBe("Custom Template Content");
+            }
+            finally
+            {
+                Directory.Delete(Path.GetDirectoryName(customTemplateFile)!, true);
+            }
+        }
+
+        [Fact]
+        public void Throws_When_Custom_Template_Does_Not_Exist()
+        {
+            var directory = new LocalDirectory("adr");
+            directory.EnsureDirectoryDeleted();
+
+            var service = new AdrFileService(new Mock<ILogger>().Object);
+            Should.Throw<DotAdrException>(() => service.GetTemplate(directory, "non-existent-template.md"));
+        }
     }
 }

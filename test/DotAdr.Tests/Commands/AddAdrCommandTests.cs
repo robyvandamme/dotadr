@@ -141,5 +141,52 @@ public class AddAdrCommandTests
             result.ShouldBe(1);
             console.Output.ShouldContain("DotAdrException");
         }
+
+        [Fact]
+        public void Adds_New_Decision_Record_With_Custom_Template()
+        {
+            var adrDirectory = new LocalDirectory("./doc/adr");
+            var defaultTemplatePath = Path.Combine(adrDirectory.AbsolutePath, "template.md");
+            var defaultTemplateContent = File.ReadAllText(defaultTemplatePath);
+
+            var customTemplateFile = new FileInfo("./custom-add-template.md");
+            var customContent =
+                "# {{ID}} {{TITLE}}\n\nCustom Add Template Content\n\n* Status: Draft\n* Date: {{DATE}}";
+            File.WriteAllText(customTemplateFile.FullName, customContent);
+
+            try
+            {
+                using var console = new TestConsole();
+                console.EmitAnsiSequences = false;
+                var logger = new Mock<ILogger>().Object;
+                var adrFileService = new AdrFileService(logger);
+                var adrFactory = new AdrFactory(logger);
+                var configurationService = new ConfigurationService(logger);
+
+                var command = new AddAdrCommand(console, logger, adrFileService, adrFactory, configurationService);
+                var remainingArguments = new Mock<IRemainingArguments>();
+                var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
+                var settings = new AddAdrSettings
+                {
+                    Title = "Custom Template Decision", TemplatePath = customTemplateFile.FullName,
+                };
+                var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+
+                result.ShouldBe(0);
+
+                var newRecord = new FileInfo(
+                    Path.Combine(adrDirectory.AbsolutePath, "002-custom-template-decision.md"));
+                newRecord.Exists.ShouldBeTrue();
+                var newRecordContent = File.ReadAllText(newRecord.FullName);
+                newRecordContent.ShouldContain("Custom Add Template Content");
+                newRecordContent.ShouldContain("# 002 Custom Template Decision");
+
+                File.ReadAllText(defaultTemplatePath).ShouldBe(defaultTemplateContent);
+            }
+            finally
+            {
+                customTemplateFile.Delete();
+            }
+        }
     }
 }

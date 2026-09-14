@@ -39,7 +39,7 @@ internal class AddAdrCommand(
 
             var config = configurationService.GetDotAdrConfiguration();
             var adrDirectory = new LocalDirectory(config.Directory);
-            var template = adrFileService.GetTemplate(adrDirectory);
+            var template = adrFileService.GetTemplate(adrDirectory, settings.TemplatePath);
             var nextId = adrFileService.GetNextRecordId(adrDirectory);
 
             SupersededDecisionRecord? superseded = null;
