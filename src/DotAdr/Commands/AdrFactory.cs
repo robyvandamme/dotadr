@@ -121,10 +121,11 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
                     StringComparison.InvariantCultureIgnoreCase);
 
                 // Remove the default supersedes line after removing its token.
-                if (!string.Equals(
-                        lineWithoutSupersedes.Trim(),
-                        "* Supersedes:",
-                        StringComparison.OrdinalIgnoreCase))
+                if (!(line.Contains("{{SUPERSEDES}}", StringComparison.InvariantCultureIgnoreCase) &&
+                      string.Equals(
+                          lineWithoutSupersedes.Trim(),
+                          "* Supersedes:",
+                          StringComparison.OrdinalIgnoreCase)))
                 {
                     processedLines.Add(lineWithoutSupersedes);
                 }

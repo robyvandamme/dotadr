@@ -44,5 +44,18 @@ public class AdrFactoryTests
 
             record.Content.ShouldContain(templateLine);
         }
+
+        [Fact]
+        public void Keeps_Literal_Supersedes_Line()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var factory = new AdrFactory(logger);
+
+            const string Template = "* Supersedes:";
+
+            var record = factory.CreateDecisionRecord(Template, "005", "Decision Title", null);
+
+            record.Content.ShouldBe(Template);
+        }
     }
 }
