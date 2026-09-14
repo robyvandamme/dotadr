@@ -76,6 +76,26 @@ public class AddAdrCommandTests
         }
 
         [Fact]
+        public void Accepts_New_Alias()
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var logger = new Mock<ILogger>().Object;
+            var adrFileService = new AdrFileService(logger);
+            var adrFactory = new AdrFactory(logger);
+            var configurationService = new ConfigurationService(logger);
+
+            var command = new AddAdrCommand(console, logger, adrFileService, adrFactory, configurationService);
+            var remainingArguments = new Mock<IRemainingArguments>();
+            var context = new CommandContext(["adr", "new"], remainingArguments.Object, "new", null);
+            var settings = new AddAdrSettings { Title = "New Decision Record" };
+
+            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+
+            result.ShouldBe(0);
+        }
+
+        [Fact]
         public void Adds_New_Decision_Record_With_Superseding_Option()
         {
             var adrDirectory = new LocalDirectory("./doc/adr");
@@ -145,8 +165,7 @@ public class AddAdrCommandTests
         [Fact]
         public void Returns_Success_When_Title_Contains_Square_Brackets()
         {
-            var adrDirectory = new LocalDirectory(
-                Path.Combine(Path.GetTempPath(), $"dotadr-{Guid.NewGuid():N}"));
+            var adrDirectory = new LocalDirectory(Path.Combine(Path.GetTempPath(), $"dotadr-{Guid.NewGuid():N}"));
             adrDirectory.EnsureFileCreated("template.md", "# {{ID}} {{TITLE}}");
 
             try
@@ -160,7 +179,12 @@ public class AddAdrCommandTests
                 configurationService.Setup(c => c.GetDotAdrConfiguration())
                     .Returns(new DotAdrConfig(adrDirectory.RelativePath));
 
-                var command = new AddAdrCommand(console, logger, adrFileService, adrFactory, configurationService.Object);
+                var command = new AddAdrCommand(
+                    console,
+                    logger,
+                    adrFileService,
+                    adrFactory,
+                    configurationService.Object);
                 var remainingArguments = new Mock<IRemainingArguments>();
                 var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
                 var settings = new AddAdrSettings { Title = "Use ILogger[T]" };
