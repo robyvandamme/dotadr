@@ -43,7 +43,7 @@ OPTIONS:
 
 ### Add a New Decision Record
 
-Adds a new decision record in the configured ADR directory using the `template.md` template file.
+Adds a new decision record in the configured ADR directory using the `template.md` template file, or a custom template when `-t`/`--template` is provided.
 
 ```text
 DESCRIPTION:
@@ -56,6 +56,7 @@ USAGE:
 EXAMPLES:
     dotnet dotadr add "Implement Circuit Breaker Pattern for External Service Calls"
     dotnet dotadr add "Separate Read and Write Data Models" -s 002
+    dotnet dotadr add "Use a Custom ADR Template" -t ./doc/templates/adr-template.md
     dotnet dotadr add "Use Database Per Service Pattern" --debug true --logfile log.txt
     dotnet dotadr new "Implement Request Rate Limiting"
 
@@ -67,6 +68,7 @@ OPTIONS:
         --debug         Enable debug logging for troubleshooting                     
         --logfile       The file to send the log output to                           
     -s, --supersedes    The ID of the decision record this decision record supersedes
+    -t, --template      Path to a custom template to use for the new decision record
 
 ```
 
