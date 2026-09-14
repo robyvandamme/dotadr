@@ -30,6 +30,8 @@ public class AdrFactoryTests
             record.Content.ShouldContain(
                 DateOnly.FromDateTime(DateTime.Today)
                     .ToString("O", CultureInfo.InvariantCulture));
+            record.Content.ShouldNotContain("* Supersedes:");
+            record.Content.ShouldNotContain("{{SUPERSEDES}}");
         }
 
         [Theory]
@@ -56,6 +58,22 @@ public class AdrFactoryTests
             var record = factory.CreateDecisionRecord(Template, "005", "Decision Title", null);
 
             record.Content.ShouldBe(Template);
+        }
+
+        [Fact]
+        public void Replaces_Supersedes_Template_Variable_When_Record_Is_Supplied()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var factory = new AdrFactory(logger);
+            var supersededRecord = new SupersededDecisionRecord("001", "001-old-decision.md", "content");
+
+            var record = factory.CreateDecisionRecord(
+                "* Supersedes: {{SUPERSEDES}}",
+                "005",
+                "Decision Title",
+                supersededRecord);
+
+            record.Content.ShouldBe("* Supersedes: [001](001-old-decision.md)");
         }
     }
 }
