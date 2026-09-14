@@ -58,7 +58,7 @@ internal class AddAdrCommand(
                 adrFileService.SaveSupersedeDecisionRecord(adrDirectory, superseded, content);
             }
 
-            console.MarkupLine($"{fileName} added to the {adrDirectory.RelativePath} directory");
+            console.MarkupLine($"{Markup.Escape(fileName)} added to the {adrDirectory.RelativePath} directory");
         }
 #pragma warning disable CA1031
         catch (Exception e)

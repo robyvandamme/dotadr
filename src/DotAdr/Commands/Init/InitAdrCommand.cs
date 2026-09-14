@@ -53,7 +53,7 @@ internal class InitAdrCommand(
             var initialDecision = adrFactory.CreateDecisionRecord(template, "001", title);
 
             adrFileService.InitializeDirectory(adrDirectoryPath, template, initialDecision, settings.Overwrite);
-            console.MarkupLine($"ADR directory {adrDirectoryPath.RelativePath} initialized");
+            console.MarkupLine($"ADR directory {Markup.Escape(adrDirectoryPath.RelativePath)} initialized");
         }
 #pragma warning disable CA1031
         catch (Exception e)
