@@ -31,5 +31,18 @@ public class AdrFactoryTests
                 DateOnly.FromDateTime(DateTime.Today)
                     .ToString("O", CultureInfo.InvariantCulture));
         }
+
+        [Theory]
+        [InlineData("* Status: {{STATUS}}")]
+        [InlineData("* Author: {{AUTHOR}}")]
+        public void Keeps_Lines_With_Unused_Template_Placeholders(string templateLine)
+        {
+            var logger = new Mock<ILogger>().Object;
+            var factory = new AdrFactory(logger);
+
+            var record = factory.CreateDecisionRecord(templateLine, "005", "Decision Title", null);
+
+            record.Content.ShouldContain(templateLine);
+        }
     }
 }
