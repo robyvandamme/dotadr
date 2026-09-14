@@ -60,6 +60,21 @@ public class AdrFactoryTests
             record.Content.ShouldBe(Template);
         }
 
+        [Theory]
+        [InlineData("Supersedes: {{SUPERSEDES}}")]
+        [InlineData("Supersedes: {{SUPERSEDES}} with trailing text")]
+        public void Removes_Custom_Supersedes_Lines_When_Record_Is_Not_Supplied(string supersedesLine)
+        {
+            var logger = new Mock<ILogger>().Object;
+            var factory = new AdrFactory(logger);
+
+            var template = $"Before\n{supersedesLine}\nAfter";
+
+            var record = factory.CreateDecisionRecord(template, "005", "Decision Title", null);
+
+            record.Content.ShouldBe("Before\nAfter");
+        }
+
         [Fact]
         public void Replaces_Supersedes_Template_Variable_When_Record_Is_Supplied()
         {

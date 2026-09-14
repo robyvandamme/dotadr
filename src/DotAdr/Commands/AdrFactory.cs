@@ -115,19 +115,10 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
             var processedLines = new List<string>();
             foreach (var line in lines)
             {
-                var lineWithoutSupersedes = line.Replace(
-                    "{{SUPERSEDES}}",
-                    string.Empty,
-                    StringComparison.InvariantCultureIgnoreCase);
-
-                // Remove the default supersedes line after removing its token.
-                if (!(line.Contains("{{SUPERSEDES}}", StringComparison.InvariantCultureIgnoreCase) &&
-                      string.Equals(
-                          lineWithoutSupersedes.Trim(),
-                          "* Supersedes:",
-                          StringComparison.OrdinalIgnoreCase)))
+                // Remove any line containing the unresolved supersedes token.
+                if (!line.Contains("{{SUPERSEDES}}", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    processedLines.Add(lineWithoutSupersedes);
+                    processedLines.Add(line);
                 }
             }
 
