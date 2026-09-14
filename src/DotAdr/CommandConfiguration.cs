@@ -41,6 +41,7 @@ internal static class CommandConfiguration
                 .WithDescription("Add a new decision record.")
                 .WithExample("add", "\"Implement Circuit Breaker Pattern for External Service Calls\"")
                 .WithExample("add", "\"Separate Read and Write Data Models\"", "-s", "002")
+                .WithExample("add", "\"Use a Custom ADR Template\"", "-t", "./doc/templates/adr-template.md")
                 .WithExample("add", "\"Use Database Per Service Pattern\"", "--debug", "true", "--logfile", "log.txt")
                 .WithExample("new", "\"Implement Request Rate Limiting\"");
         });

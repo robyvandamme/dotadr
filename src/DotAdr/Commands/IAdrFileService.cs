@@ -6,7 +6,7 @@ namespace DotAdr.Commands;
 
 internal interface IAdrFileService
 {
-    string GetTemplate(LocalDirectory adrDirectory);
+    string GetTemplate(LocalDirectory adrDirectory, string? templatePath = null);
 
     void InitializeDirectory(
         LocalDirectory adrDirectory,

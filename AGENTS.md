@@ -17,14 +17,14 @@
   - `IConfigurationService` (`src/DotAdr/Commands/ConfigurationService.cs`) reads/writes `dotadr.json`.
 
 ## ADR Data Flow (Important)
-- `add` command loads config (`dotadr.json`) -> resolves ADR directory -> reads `template.md`.
+- `add` command loads config (`dotadr.json`) -> resolves ADR directory -> reads `template.md`, or a custom template when `-t`/`--template` is provided.
 - Next ADR id is inferred from existing files (`001-...md`, `002-...md`, etc.).
 - Template variables used by factory: `{{ID}}`, `{{TITLE}}`, `{{DATE}}`, `{{SUPERSEDES}}`.
 - Supersede behavior updates both records: new ADR contains "Supersedes" link; old ADR gets "Superseded by" link.
 
 ## Project-Specific Conventions
 - ADR filename format: `{id:000}-{safe-title}.md` (lowercase, spaces to dashes, invalid chars removed).
-- Template filename is fixed to `template.md` in the ADR directory.
+- Default template filename is `template.md` in the ADR directory; `add` can override it with `-t`/`--template` without replacing that file.
 - Config file is `dotadr.json` in working directory; JSON uses camelCase (`directory`).
 - Logging pattern uses extension methods in `src/DotAdr/Common/LoggerExtensions.cs`:
   - `MethodStart(class, method)` / `MethodReturn(class, method[, result])`.
