@@ -151,7 +151,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
     /// <param name="adrDirectory">The ADR directory.</param>
     /// <returns>The <see cref="SupersededDecisionRecord"/> if found.</returns>
     /// <exception cref="DotAdrException">When no record is found.</exception>
-    public SupersededDecisionRecord? TryFindSupersededDecisionRecord(string id, LocalDirectory adrDirectory)
+    public SupersededDecisionRecord TryFindSupersededDecisionRecord(string id, LocalDirectory adrDirectory)
     {
         logger.MethodStart(nameof(AdrFileService), nameof(TryFindSupersededDecisionRecord));
 
