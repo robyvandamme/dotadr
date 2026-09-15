@@ -19,9 +19,9 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
     {
         logger.MethodStart(nameof(AdrFileService), nameof(InitializeDirectory));
 
-        ArgumentNullException.ThrowIfNull(nameof(adrDirectory));
-        ArgumentNullException.ThrowIfNull(nameof(initialDecisionRecord));
-        ArgumentException.ThrowIfNullOrEmpty(nameof(decisionTemplate));
+        ArgumentNullException.ThrowIfNull(adrDirectory);
+        ArgumentNullException.ThrowIfNull(initialDecisionRecord);
+        ArgumentException.ThrowIfNullOrEmpty(decisionTemplate);
 
         CreateDirectory(adrDirectory);
 
