@@ -137,15 +137,9 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         if (!variables.ContainsKey("SUPERSEDES"))
         {
             var lines = template.Split('\n');
-            var processedLines = new List<string>();
-            foreach (var line in lines)
-            {
-                // Remove any line containing the unresolved supersedes token.
-                if (!line.Contains("{{SUPERSEDES}}", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    processedLines.Add(line);
-                }
-            }
+            var processedLines = lines.Where(line => !line.Contains(
+                "{{SUPERSEDES}}",
+                StringComparison.InvariantCultureIgnoreCase)).ToList();
 
             return string.Join('\n', processedLines);
         }
