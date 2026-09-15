@@ -282,13 +282,15 @@ csharp_preserve_single_line_statements = true
 # dotnet_diagnostic.IDE0060.severity = warning // The property is not supported
 
 # StyleCop configuration
-
 dotnet_diagnostic.SA1633.severity = warning
 dotnet_diagnostic.SA1101.severity = none
 dotnet_diagnostic.SA1308.severity = none
 dotnet_diagnostic.SA1311.severity = none
 dotnet_diagnostic.SA1309.severity = none
 dotnet_diagnostic.SA1201.severity = none # allow properties before ctor: how do we actually enforce this?
+
+# Roslyn analyzer configuration
+dotnet_diagnostic.CA2007.severity = none # ConfigureAwait not relevant for console apps.
 
 [test/**/*.{cs,vb}]
 dotnet_diagnostic.CA2007.severity = none
