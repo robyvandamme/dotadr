@@ -247,7 +247,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
 #pragma warning restore CA1308
 
         // Remove multiple consecutive dashes
-        safe = Regex.Replace(safe, @"-+", "-");
+        safe = Regex.Replace(safe, @"-+", "-", RegexOptions.CultureInvariant, TimeSpan.FromMilliseconds(100));
 
         logger.MethodReturn(nameof(AdrFileService), nameof(MakeSafeFileName), safe);
 
