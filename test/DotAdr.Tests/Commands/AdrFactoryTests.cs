@@ -116,7 +116,7 @@ public class AdrFactoryTests
             result.ShouldBe(
                 $"# Decision{newline}{newline}" +
                 $"* Status: Accepted - Superseded by [002](002-new-decision.md) " +
-                $"{DateOnly.FromDateTime(DateTime.Today):yyyy-MM-dd}{newline}{newline}" +
+                $"{DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}{newline}{newline}" +
                 "## Context");
         }
 
@@ -139,7 +139,7 @@ public class AdrFactoryTests
             result.ShouldBe(
                 "# Decision\r\n\r\n" +
                 $"* Status: Accepted - Superseded by [002](002-new-decision.md) " +
-                $"{DateOnly.FromDateTime(DateTime.Today):yyyy-MM-dd}\n\n## Context\r");
+                $"{DateOnly.FromDateTime(DateTime.Today).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}\n\n## Context\r");
         }
     }
 }
