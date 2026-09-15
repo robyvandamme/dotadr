@@ -12,7 +12,7 @@
     <Copyright>Copyright © 2025 Roby Van Damme.</Copyright>
     <PackageId>dotADR</PackageId>
     <Product>dotADR</Product>
-    <Description>.NET Global Tool to create Architectural Decision Records in .NET solutions.</Description>
+    <Description>.NET Tool to create Architectural Decision Records in .NET solutions.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>

@@ -8,27 +8,48 @@
 
 ## Install
 
+### Install as a local tool
+
+If the repository does not already have a tool manifest, create one:
+
+```shell
+dotnet new tool-manifest
+```
+
+Install the tool:
+
 ```shell
 dotnet tool install dotADR
 ```
+
+### Install as a global tool
+
+```shell
+dotnet tool install -g dotADR
+```
+
 ## Features
+
+For the examples below, use the `dotnet dotadr` command if you installed it as a local tool, or `dotadr` if you
+installed it as a global tool.
 
 ### Initialize the ADR Directory
 
-Creates the ADR directory, adds the default template and a first decision record to the directory, and saves the ADR directory to a `dotadr.json` file.
+Creates the ADR directory, adds the default template and a first decision record to the directory, and saves the ADR
+directory to a `dotadr.json` file.
 
 ```text
 DESCRIPTION:
 Initialize the ADR directory
 
 USAGE:
-    dotadr init [OPTIONS]
+    dotnet dotadr init [OPTIONS]
 
 EXAMPLES:
-    dotadr init
-    dotadr init -d ./doc/arch/adr -o true
-    dotadr init -t ./doc/templates/adr-template.md
-    dotadr init --debug true --logfile log.txt
+    dotnet dotadr init
+    dotnet dotadr init -d ./doc/arch/adr -o true
+    dotnet dotadr init -t ./doc/templates/adr-template.md
+    dotnet dotadr init --debug true --logfile log.txt
 
 OPTIONS:
                        DEFAULT                                                             
@@ -43,7 +64,8 @@ OPTIONS:
 
 ### Add a New Decision Record
 
-Adds a new decision record in the configured ADR directory using the `template.md` template file, or a custom template when `-t`/`--template` is provided.
+Adds a new decision record in the configured ADR directory using the `template.md` template file, or a custom template
+when `-t`/`--template` is provided.
 
 ```text
 DESCRIPTION:
@@ -74,7 +96,9 @@ OPTIONS:
 
 ## The ADR Template
 
-The default template is based on [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) and looks like this:
+The default template is based
+on [Documenting Architecture Decisions](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) and
+looks like this:
 
 ```text
 # {{ID}} {{TITLE}}
@@ -106,25 +130,28 @@ The decision record that is added upon initialization looks like this:
 ## Consequences
 
 ```
-The line containing the `{{SUPERSEDES}}` variable is removed unless the `--supersedes`option is provided.
 
+The line containing the `{{SUPERSEDES}}` variable is removed unless the `--supersedes`option is provided.
 
 ### Changing the Template
 
-Feel free to customize the template, but consider keeping the `Status` and `Supersedes` sections as-is to maintain full feature compatibility.
-You can choose to not include a variable, in that case it is simply ignored.
+Feel free to customize the template, but consider keeping the `Status` and `Supersedes` sections as-is to maintain full
+feature compatibility. You can choose to not include a variable, in that case it is simply ignored.
 
 ### Superseding a Decision Record
 
-In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` and `"* Supersedes: {{SUPERSEDES}}"` sections in the template more or less intact.
+In order for the superseding functionality to work you will need to keep the `"* Status: xxxx"` and
+`"* Supersedes: {{SUPERSEDES}}"` sections in the template more or less intact.
 
 ```shell
 dotnet dotadr add "Superseding Decision Record" -s 002
 ```
 
 When a record supersedes another record:
+
 * In the new record the `{{SUPERSEDES}}` variable is replaced by a link to the superseded record.
-* In the superseded record "* Status: [current status]" is replaced by "* Status: [current status] - Superseded by " + a link to the new superseding decision record and the current date.
+* In the superseded record "* Status: [current status]" is replaced by "* Status: [current status] - Superseded by " + a
+  link to the new superseding decision record and the current date.
 
 #### Example
 
