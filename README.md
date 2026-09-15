@@ -10,6 +10,14 @@
 
 ### Install as a local tool
 
+If the repository does not already have a tool manifest, create one:
+
+```shell
+dotnet new tool-manifest
+```
+
+Install the tool:
+
 ```shell
 dotnet tool install dotADR
 ```
