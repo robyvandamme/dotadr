@@ -91,4 +91,55 @@ public class AdrFactoryTests
             record.Content.ShouldBe("* Supersedes: [001](001-old-decision.md)");
         }
     }
+
+    public class UpdateSupersededDecisionContent
+    {
+        [Theory]
+        [InlineData("\n")]
+        [InlineData("\r\n")]
+        [InlineData("\r")]
+        public void Preserves_Line_Endings(string newline)
+        {
+            var logger = new Mock<ILogger>().Object;
+            var factory = new AdrFactory(logger);
+            var supersededRecord = new SupersededDecisionRecord(
+                "001",
+                "001-old-decision.md",
+                $"# Decision{newline}{newline}* Status: Accepted{newline}{newline}## Context");
+            var supersedingRecord = new DecisionRecord("002", "New decision", "content");
+
+            var result = factory.UpdateSupersededDecisionContent(
+                supersededRecord,
+                supersedingRecord,
+                "002-new-decision.md");
+
+            result.ShouldBe(
+                $"# Decision{newline}{newline}" +
+                $"* Status: Accepted - Superseded by [002](002-new-decision.md) " +
+                $"{DateOnly.FromDateTime(DateTime.Today):yyyy-MM-dd}{newline}{newline}" +
+                "## Context");
+        }
+
+        [Fact]
+        public void Preserves_Mixed_Line_Endings()
+        {
+            var logger = new Mock<ILogger>().Object;
+            var factory = new AdrFactory(logger);
+            var supersededRecord = new SupersededDecisionRecord(
+                "001",
+                "001-old-decision.md",
+                "# Decision\r\n\r\n* Status: Accepted\n\n## Context\r");
+            var supersedingRecord = new DecisionRecord("002", "New decision", "content");
+
+            var result = factory.UpdateSupersededDecisionContent(
+                supersededRecord,
+                supersedingRecord,
+                "002-new-decision.md");
+
+            result.ShouldBe(
+                "# Decision\r\n\r\n" +
+                $"* Status: Accepted - Superseded by [002](002-new-decision.md) " +
+                $"{DateOnly.FromDateTime(DateTime.Today):yyyy-MM-dd}\n\n## Context\r");
+        }
+    }
 }
