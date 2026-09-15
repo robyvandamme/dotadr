@@ -223,7 +223,7 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         }
         else
         {
-            Log.Debug("The file {file} already exists", filePath);
+            Log.Debug("The file {File} already exists", filePath);
         }
     }
 
