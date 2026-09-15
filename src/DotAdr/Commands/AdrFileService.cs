@@ -77,7 +77,11 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         // Get all existing markdown files that follow our naming convention
         var files = Directory.GetFiles(adrDirectory.AbsolutePath, "???-*.md")
             .Select(Path.GetFileName)
-            .Where(file => file != null && Regex.IsMatch(file, @"^\d{3}-.*\.md$"))
+            .Where(file => file != null && Regex.IsMatch(
+                file,
+                @"^\d{3}-.*\.md$",
+                RegexOptions.CultureInvariant,
+                TimeSpan.FromMilliseconds(100)))
             .ToList();
 
         if (files.Count == 0)
