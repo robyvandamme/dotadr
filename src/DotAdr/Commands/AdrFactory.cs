@@ -39,7 +39,7 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         string templateContent,
         string id,
         string decisionTitle,
-        SupersededDecisionRecord? supersededDecisionRecord)
+        SupersededDecisionRecord? supersededDecisionRecord = null)
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionRecord));
 
