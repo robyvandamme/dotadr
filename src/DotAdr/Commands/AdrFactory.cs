@@ -43,6 +43,10 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
     {
         logger.MethodStart(nameof(AdrFactory), nameof(CreateDecisionRecord));
 
+        ArgumentException.ThrowIfNullOrWhiteSpace(templateContent);
+        ArgumentException.ThrowIfNullOrWhiteSpace(id);
+        ArgumentException.ThrowIfNullOrWhiteSpace(decisionTitle);
+
         var templateVariables = new Dictionary<string, string>
         {
             ["ID"] = id,
@@ -69,6 +73,10 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
         DecisionRecord supersedingRecord,
         string supersedingFileName)
     {
+        ArgumentNullException.ThrowIfNull(supersededDecisionRecord);
+        ArgumentNullException.ThrowIfNull(supersedingRecord);
+        ArgumentException.ThrowIfNullOrWhiteSpace(supersedingFileName);
+
         if (supersededDecisionRecord.Content.Contains("* Status:", StringComparison.OrdinalIgnoreCase))
         {
             var appendText =
