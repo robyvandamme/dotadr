@@ -91,20 +91,37 @@ internal class AdrFactory(ILogger logger) : IAdrFactory
 
     private static string AppendToStatusLine(string content, string appendText)
     {
-        var lines = content.Split(["\r\n", "\r", "\n"], StringSplitOptions.None);
-        var found = false;
-
-        for (int i = 0; i < lines.Length; i++)
+        var lineStart = 0;
+        while (lineStart < content.Length)
         {
-            if (lines[i].Contains("* Status:", StringComparison.OrdinalIgnoreCase))
+            var lineEnd = content.IndexOfAny(['\r', '\n'], lineStart);
+            if (lineEnd < 0)
             {
-                lines[i] += appendText;
-                found = true;
+                lineEnd = content.Length;
+            }
+
+            if (content[lineStart..lineEnd].Contains("* Status:", StringComparison.OrdinalIgnoreCase))
+            {
+                return content[..lineEnd] + appendText + content[lineEnd..];
+            }
+
+            if (lineEnd == content.Length)
+            {
                 break;
+            }
+
+            lineStart = lineEnd + 1;
+
+            // Treat CRLF as one line ending.
+            if (content[lineEnd] == '\r' &&
+                lineEnd + 1 < content.Length &&
+                content[lineEnd + 1] == '\n')
+            {
+                lineStart++;
             }
         }
 
-        return found ? string.Join(Environment.NewLine, lines) : content;
+        return content;
     }
 
     private static string ProcessTemplate(string template, Dictionary<string, string> variables)
