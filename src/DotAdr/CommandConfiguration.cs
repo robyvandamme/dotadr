@@ -1,6 +1,5 @@
 // Copyright © 2025 Roby Van Damme.
 
-using System.Diagnostics;
 using DotAdr.Commands;
 using DotAdr.Commands.Add;
 using DotAdr.Commands.Init;
@@ -13,10 +12,9 @@ internal static class CommandConfiguration
 {
     internal static void Configure(this CommandApp commandApp, ILogger logger)
     {
-        ArgumentNullException.ThrowIfNull(nameof(commandApp));
-        ArgumentNullException.ThrowIfNull(nameof(logger));
+        ArgumentNullException.ThrowIfNull(commandApp);
+        ArgumentNullException.ThrowIfNull(logger);
 
-        Debug.Assert(commandApp != null, nameof(commandApp) + " != null");
         commandApp.Configure(config =>
         {
 #if DEBUG

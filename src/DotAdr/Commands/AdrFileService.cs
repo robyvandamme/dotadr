@@ -19,9 +19,9 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
     {
         logger.MethodStart(nameof(AdrFileService), nameof(InitializeDirectory));
 
-        ArgumentNullException.ThrowIfNull(nameof(adrDirectory));
-        ArgumentNullException.ThrowIfNull(nameof(initialDecisionRecord));
-        ArgumentException.ThrowIfNullOrEmpty(nameof(decisionTemplate));
+        ArgumentNullException.ThrowIfNull(adrDirectory);
+        ArgumentNullException.ThrowIfNull(initialDecisionRecord);
+        ArgumentException.ThrowIfNullOrEmpty(decisionTemplate);
 
         CreateDirectory(adrDirectory);
 
@@ -151,9 +151,12 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
     /// <param name="adrDirectory">The ADR directory.</param>
     /// <returns>The <see cref="SupersededDecisionRecord"/> if found.</returns>
     /// <exception cref="DotAdrException">When no record is found.</exception>
-    public SupersededDecisionRecord? TryFindSupersededDecisionRecord(string id, LocalDirectory adrDirectory)
+    public SupersededDecisionRecord TryFindSupersededDecisionRecord(string id, LocalDirectory adrDirectory)
     {
         logger.MethodStart(nameof(AdrFileService), nameof(TryFindSupersededDecisionRecord));
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(id);
+        ArgumentNullException.ThrowIfNull(adrDirectory);
 
         var markdownFiles = Directory.GetFiles(adrDirectory.AbsolutePath, "*.md");
         var supersededFile =
@@ -185,6 +188,10 @@ internal class AdrFileService(ILogger logger) : IAdrFileService
         SupersededDecisionRecord decisionRecord,
         string updatedContent)
     {
+        ArgumentNullException.ThrowIfNull(adrDirectory);
+        ArgumentNullException.ThrowIfNull(decisionRecord);
+        ArgumentNullException.ThrowIfNull(updatedContent);
+
         var filePath = Path.Combine(adrDirectory.AbsolutePath, decisionRecord.FileName);
         var fileInfo = new FileInfo(filePath);
         if (!fileInfo.Exists)
