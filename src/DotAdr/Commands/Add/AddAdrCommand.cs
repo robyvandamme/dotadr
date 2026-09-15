@@ -30,7 +30,7 @@ internal class AddAdrCommand(
 
         try
         {
-            if (context.Name != "add")
+            if (context.Name != "add" && context.Name != "new")
             {
                 throw new DotAdrException($"Unsupported command name {context.Name}");
             }
