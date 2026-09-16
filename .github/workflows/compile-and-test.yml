@@ -12,6 +12,11 @@ on:
       - '!AGENTS.md'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
 jobs:
   ubuntu-latest:
     name: ubuntu-latest
