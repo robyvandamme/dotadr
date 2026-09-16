@@ -36,3 +36,10 @@ jobs:
         with:
           name: test-reports
           path: artifacts/test-reports
+      - name: Code Coverage Summary Report
+        uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95
+        with:
+          filename: artifacts/test-reports/*/coverage.cobertura.xml
+          badge: true
+          output: both
+          format: markdown
