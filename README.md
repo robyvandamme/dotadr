@@ -5,6 +5,7 @@
 [![Release](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/dotADR?color=004D81)](https://www.nuget.org/packages/dotADR/)
 [![Pre-release](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/pre-release.yml)
+[![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=robyvandamme_dotadr&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=robyvandamme_dotadr)
 
 ## Install
 
