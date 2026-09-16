@@ -32,7 +32,7 @@ jobs:
       - name: Check for solution file
         id: check-sln
         run: |
-          if ls *.sln 1> /dev/null 2>&1; then
+          if ls ./*.sln > /dev/null 2>&1; then
             echo "found=true" >> $GITHUB_OUTPUT
             echo "Solution file exists"
           else
@@ -127,7 +127,7 @@ jobs:
 
       - name: Create pull request
         if: steps.changes.outputs.csproj_changed == 'true' || steps.changes.outputs.globaljson_changed == 'true' || steps.changes.outputs.dotnettools_changed == 'true'
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1
         with:
           token: ${{ steps.app-token.outputs.token }}
           commit-message: ${{ steps.pr-meta.outputs.commit }}
