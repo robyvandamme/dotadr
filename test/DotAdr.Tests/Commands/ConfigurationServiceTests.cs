@@ -1,5 +1,6 @@
 // Copyright © 2025 Roby Van Damme.
 
+using System.Text.Json;
 using DotAdr.Commands;
 using DotAdr.Common;
 using Moq;
@@ -87,6 +88,31 @@ public class ConfigurationServiceTests
             service.ConfigFilePath.EnsureFileDeleted();
 
             Should.Throw<DotAdrException>(() => service.GetDotAdrConfiguration());
+        }
+
+        [Fact]
+        public void Throws_When_Configuration_Is_Malformed_Json()
+        {
+            var service = new ConfigurationService(new Mock<ILogger>().Object);
+
+            File.WriteAllText(service.ConfigFilePath, "{ malformed json }");
+
+            var exception = Should.Throw<DotAdrException>(() => service.GetDotAdrConfiguration());
+
+            exception.Message.ShouldBe($"Failed to read configuration at {service.ConfigFilePath}");
+            exception.InnerException.ShouldBeOfType<JsonException>();
+        }
+
+        [Fact]
+        public void Throws_When_Configuration_Is_Missing_Directory()
+        {
+            var service = new ConfigurationService(new Mock<ILogger>().Object);
+
+            File.WriteAllText(service.ConfigFilePath, "{}");
+
+            var exception = Should.Throw<DotAdrException>(() => service.GetDotAdrConfiguration());
+
+            exception.Message.ShouldBe($"ADR configuration directory value at {service.ConfigFilePath} is null or empty");
         }
     }
 }
