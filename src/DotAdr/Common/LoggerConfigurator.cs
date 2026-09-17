@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿// Copyright © 2025 Roby Van Damme.
+
+using System.Globalization;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
