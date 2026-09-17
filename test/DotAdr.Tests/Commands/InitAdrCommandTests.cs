@@ -136,6 +136,33 @@ public class InitAdrCommandTests
         }
 
         [Fact]
+        public void Returns_Failure_When_Command_Name_Is_Unsupported()
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var logger = new Mock<ILogger>().Object;
+            var adrFileService = new Mock<IAdrFileService>();
+            var adrFactory = new Mock<IAdrFactory>();
+            var configurationService = new Mock<IConfigurationService>();
+
+            var command = new InitAdrCommand(
+                console,
+                logger,
+                adrFileService.Object,
+                adrFactory.Object,
+                configurationService.Object);
+            var remainingArguments = new Mock<IRemainingArguments>();
+            var context = new CommandContext(["adr", "unsupported"], remainingArguments.Object, "unsupported", null);
+            var result = command.ExecuteForTest(context, new InitAdrSettings(), CancellationToken.None);
+
+            result.ShouldBe(1);
+            console.Output.ShouldContain("Unsupported command name unsupported");
+            configurationService.Verify(
+                service => service.SaveAdrConfiguration(It.IsAny<LocalDirectory>(), It.IsAny<bool>()),
+                Times.Never);
+        }
+
+        [Fact]
         public void Returns_Success_When_Directory_Path_Contains_Square_Brackets()
         {
             var adrDirectory = new LocalDirectory(
