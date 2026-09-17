@@ -3,6 +3,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using DotAdr;
 using DotAdr.Common;
 using Serilog;
@@ -18,7 +19,23 @@ Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
 ConfigureLogger();
 
 var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
-Log.Debug("DotADR version {@Version}", versionInfo);
+var platform = OperatingSystem.IsWindows()
+    ? "Windows"
+    : OperatingSystem.IsMacOS()
+        ? "macOS"
+        : OperatingSystem.IsLinux()
+            ? "Linux"
+            : OperatingSystem.IsFreeBSD()
+                ? "FreeBSD"
+                : "Unknown OS";
+
+Log.Debug(
+    "DotADR {Version} running on {Runtime}, {Platform} {Architecture} (OS details: {OSDescription})",
+    versionInfo.Version,
+    RuntimeInformation.FrameworkDescription,
+    platform,
+    RuntimeInformation.ProcessArchitecture,
+    RuntimeInformation.OSDescription);
 Log.Debug("Configuring app");
 
 var commandApp = new CommandApp();
