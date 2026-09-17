@@ -47,7 +47,15 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
         }
 
         var jsonString = File.ReadAllText(ConfigFilePath);
-        var config = JsonSerializer.Deserialize<DotAdrConfig>(jsonString, _jsonSerializerOptions);
+        DotAdrConfig? config;
+        try
+        {
+            config = JsonSerializer.Deserialize<DotAdrConfig>(jsonString, _jsonSerializerOptions);
+        }
+        catch (JsonException exception)
+        {
+            throw new DotAdrException($"Failed to read configuration at {ConfigFilePath}", exception);
+        }
 
         if (config == null)
         {

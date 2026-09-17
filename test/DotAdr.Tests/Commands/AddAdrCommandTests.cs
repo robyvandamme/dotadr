@@ -163,6 +163,32 @@ public class AddAdrCommandTests
         }
 
         [Fact]
+        public void Returns_Failure_When_Command_Name_Is_Unsupported()
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var logger = new Mock<ILogger>().Object;
+            var adrFileService = new Mock<IAdrFileService>();
+            var adrFactory = new Mock<IAdrFactory>();
+            var configurationService = new Mock<IConfigurationService>();
+
+            var command = new AddAdrCommand(
+                console,
+                logger,
+                adrFileService.Object,
+                adrFactory.Object,
+                configurationService.Object);
+            var remainingArguments = new Mock<IRemainingArguments>();
+            var context = new CommandContext(["adr", "unsupported"], remainingArguments.Object, "unsupported", null);
+            var settings = new AddAdrSettings { Title = "New Decision Record" };
+            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+
+            result.ShouldBe(1);
+            console.Output.ShouldContain("Unsupported command name unsupported");
+            configurationService.Verify(service => service.GetDotAdrConfiguration(), Times.Never);
+        }
+
+        [Fact]
         public void Returns_Success_When_Title_Contains_Square_Brackets()
         {
             var adrDirectory = new LocalDirectory(Path.Combine(Path.GetTempPath(), $"dotadr-{Guid.NewGuid():N}"));

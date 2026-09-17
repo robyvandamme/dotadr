@@ -20,11 +20,18 @@ internal record VersionInfo
         AssemblyFileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
         ProductVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
 
-        if (ProductVersion != null && ProductVersion.Length > 0)
+        Version = ParseProductVersion(ProductVersion);
+    }
+
+    internal static string? ParseProductVersion(string? productVersion)
+    {
+        if (string.IsNullOrEmpty(productVersion))
         {
-            var plusSign = ProductVersion.IndexOf('+', StringComparison.OrdinalIgnoreCase);
-            Version = ProductVersion.Remove(plusSign);
+            return null;
         }
+
+        var plusSign = productVersion.IndexOf('+', StringComparison.OrdinalIgnoreCase);
+        return plusSign >= 0 ? productVersion[..plusSign] : productVersion;
     }
 
     public string? AssemblyVersion { get; }
