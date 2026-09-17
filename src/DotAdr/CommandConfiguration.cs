@@ -36,7 +36,7 @@ internal static class CommandConfiguration
                 .WithExample("init", "--debug", "true", "--logfile", "log.txt");
             config.AddCommand<AddAdrCommand>(name: "add")
                 .WithAlias("new")
-                .WithDescription("Add a new decision record.")
+                .WithDescription("Add a new decision record. Alias: new")
                 .WithExample("add", "\"Implement Circuit Breaker Pattern for External Service Calls\"")
                 .WithExample("add", "\"Separate Read and Write Data Models\"", "-s", "002")
                 .WithExample("add", "\"Use a Custom ADR Template\"", "-t", "./doc/templates/adr-template.md")
