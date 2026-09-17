@@ -23,8 +23,6 @@ Log.Debug("Configuring app");
 
 var commandApp = new CommandApp();
 
-AnsiConsole.WriteLine($"Initializing DotADR version {versionInfo.Version}");
-
 commandApp.Configure(Log.Logger);
 
 try
