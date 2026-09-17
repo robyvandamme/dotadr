@@ -1,14 +1,11 @@
 ﻿// Copyright © 2025 Roby Van Damme.
 
 using System.Diagnostics;
-using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using DotAdr;
 using DotAdr.Common;
 using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -16,10 +13,10 @@ using Spectre.Console.Cli;
 Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
 #endif
 
-ConfigureLogger();
+LoggerConfigurator.Configure(args);
 
 var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
-var platform = GetPlatform();
+var platform = PlatformInfo.GetPlatform();
 
 Log.Debug(
     "DotADR {Version} running on {Runtime}, {Platform} {Architecture} (OS details: {OSDescription})",
@@ -50,52 +47,4 @@ catch (Exception ex)
 finally
 {
     await Log.CloseAndFlushAsync();
-}
-
-void ConfigureLogger()
-{
-    var defaultLevelSwitch = new LoggingLevelSwitch(LogEventLevel.Error);
-    if (ArgumentHandler.IsDebugMode(args))
-    {
-        defaultLevelSwitch.MinimumLevel = LogEventLevel.Debug;
-    }
-
-    var logFile = ArgumentHandler.LogFile(args);
-
-    if (!string.IsNullOrWhiteSpace(logFile))
-    {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.ControlledBy(defaultLevelSwitch)
-#if DEBUG
-            .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
-#endif
-            .WriteTo.File(
-                logFile,
-                rollingInterval: RollingInterval.Day,
-                formatProvider: CultureInfo.InvariantCulture)
-            .CreateLogger();
-    }
-    else
-    {
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.ControlledBy(defaultLevelSwitch)
-#if DEBUG
-            .WriteTo.Console(formatProvider: CultureInfo.InvariantCulture)
-#endif
-            .CreateLogger();
-    }
-}
-
-string GetPlatform()
-{
-    var platformString = OperatingSystem.IsWindows()
-        ? "Windows"
-        : OperatingSystem.IsMacOS()
-            ? "macOS"
-            : OperatingSystem.IsLinux()
-                ? "Linux"
-                : OperatingSystem.IsFreeBSD()
-                    ? "FreeBSD"
-                    : "Unknown OS";
-    return platformString;
 }
