@@ -19,15 +19,7 @@ Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
 ConfigureLogger();
 
 var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
-var platform = OperatingSystem.IsWindows()
-    ? "Windows"
-    : OperatingSystem.IsMacOS()
-        ? "macOS"
-        : OperatingSystem.IsLinux()
-            ? "Linux"
-            : OperatingSystem.IsFreeBSD()
-                ? "FreeBSD"
-                : "Unknown OS";
+var platform = GetPlatform();
 
 Log.Debug(
     "DotADR {Version} running on {Runtime}, {Platform} {Architecture} (OS details: {OSDescription})",
@@ -92,4 +84,18 @@ void ConfigureLogger()
 #endif
             .CreateLogger();
     }
+}
+
+string GetPlatform()
+{
+    var platformString = OperatingSystem.IsWindows()
+        ? "Windows"
+        : OperatingSystem.IsMacOS()
+            ? "macOS"
+            : OperatingSystem.IsLinux()
+                ? "Linux"
+                : OperatingSystem.IsFreeBSD()
+                    ? "FreeBSD"
+                    : "Unknown OS";
+    return platformString;
 }
