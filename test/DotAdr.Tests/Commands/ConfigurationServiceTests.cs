@@ -104,11 +104,25 @@ public class ConfigurationServiceTests
         }
 
         [Fact]
-        public void Throws_When_Configuration_Is_Missing_Directory()
+        public void Throws_When_Configuration_Is_Null_Json()
         {
             var service = new ConfigurationService(new Mock<ILogger>().Object);
 
-            File.WriteAllText(service.ConfigFilePath, "{}");
+            File.WriteAllText(service.ConfigFilePath, "null");
+
+            var exception = Should.Throw<DotAdrException>(() => service.GetDotAdrConfiguration());
+
+            exception.Message.ShouldBe($"Failed to read configuration at {service.ConfigFilePath}");
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData("   ")]
+        public void Throws_When_Configuration_Directory_Is_Empty_Or_Whitespace(string directory)
+        {
+            var service = new ConfigurationService(new Mock<ILogger>().Object);
+
+            File.WriteAllText(service.ConfigFilePath, $"{{\"directory\":\"{directory}\"}}");
 
             var exception = Should.Throw<DotAdrException>(() => service.GetDotAdrConfiguration());
 
