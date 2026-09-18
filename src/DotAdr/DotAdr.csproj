@@ -3,9 +3,9 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
+    <RollForward>Major</RollForward>
     <NoWarn>$(NoWarn),1573,1591,1712</NoWarn>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dotadr</ToolCommandName>
     <Authors>Roby Van Damme</Authors>
