@@ -15,13 +15,7 @@ internal class InitAdrCommand(
     IConfigurationService configurationService)
     : Command<InitAdrSettings>
 {
-    internal int ExecuteForTest(
-        CommandContext context,
-        InitAdrSettings settings,
-        CancellationToken cancellationToken)
-        => Execute(context, settings, cancellationToken);
-
-    protected override int Execute(
+    public override int Execute(
         CommandContext context,
         InitAdrSettings settings,
         CancellationToken cancellationToken)

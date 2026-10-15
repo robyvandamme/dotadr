@@ -33,7 +33,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings { Overwrite = true };
-            command.ExecuteForTest(context, settings, CancellationToken.None);
+            command.Execute(context, settings, CancellationToken.None);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
             var settings = new AddAdrSettings { Title = "New Decision Record" };
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
             console.Output.ShouldContain("new-decision-record.md added to the ./doc/adr directory");
@@ -90,7 +90,7 @@ public class AddAdrCommandTests
             var context = new CommandContext(["adr", "new"], remainingArguments.Object, "new", null);
             var settings = new AddAdrSettings { Title = "New Decision Record" };
 
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
         }
@@ -115,7 +115,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
             var settings = new AddAdrSettings { Title = "New Decision Record", Supersedes = "001" };
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
             console.Output.ShouldContain("new-decision-record.md added to the ./doc/adr directory");
@@ -157,7 +157,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
             var settings = new AddAdrSettings { Title = "New Decision Record" };
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
             result.ShouldBe(1);
             console.Output.ShouldContain("DotAdrException");
         }
@@ -181,7 +181,7 @@ public class AddAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "unsupported"], remainingArguments.Object, "unsupported", null);
             var settings = new AddAdrSettings { Title = "New Decision Record" };
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(1);
             console.Output.ShouldContain("Unsupported command name unsupported");
@@ -215,7 +215,7 @@ public class AddAdrCommandTests
                 var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
                 var settings = new AddAdrSettings { Title = "Use ILogger[T]" };
 
-                var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+                var result = command.Execute(context, settings, CancellationToken.None);
 
                 File.Exists(Path.Combine(adrDirectory.AbsolutePath, "001-use-ilogger[t].md")).ShouldBeTrue();
                 result.ShouldBe(0);
@@ -254,7 +254,7 @@ public class AddAdrCommandTests
                 {
                     Title = "Custom Template Decision", TemplatePath = customTemplateFile.FullName,
                 };
-                var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+                var result = command.Execute(context, settings, CancellationToken.None);
 
                 result.ShouldBe(0);
 

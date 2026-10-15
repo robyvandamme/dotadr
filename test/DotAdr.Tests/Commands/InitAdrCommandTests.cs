@@ -44,7 +44,7 @@ public class InitAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings();
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
             console.Output.ShouldContain("ADR directory ./doc/adr initialized");
@@ -91,7 +91,7 @@ public class InitAdrCommandTests
                 Directory = adrDirectory.RelativePath, TemplatePath = customTemplateFile.FullName,
             };
 
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(0);
 
@@ -129,7 +129,7 @@ public class InitAdrCommandTests
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings();
-            var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+            var result = command.Execute(context, settings, CancellationToken.None);
 
             result.ShouldBe(1);
             console.Output.ShouldContain("DotAdrException");
@@ -153,7 +153,7 @@ public class InitAdrCommandTests
                 configurationService.Object);
             var remainingArguments = new Mock<IRemainingArguments>();
             var context = new CommandContext(["adr", "unsupported"], remainingArguments.Object, "unsupported", null);
-            var result = command.ExecuteForTest(context, new InitAdrSettings(), CancellationToken.None);
+            var result = command.Execute(context, new InitAdrSettings(), CancellationToken.None);
 
             result.ShouldBe(1);
             console.Output.ShouldContain("Unsupported command name unsupported");
@@ -187,7 +187,7 @@ public class InitAdrCommandTests
                 var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
                 var settings = new InitAdrSettings { Directory = adrDirectory.RelativePath, Overwrite = true };
 
-                var result = command.ExecuteForTest(context, settings, CancellationToken.None);
+                var result = command.Execute(context, settings, CancellationToken.None);
 
                 File.Exists(Path.Combine(adrDirectory.AbsolutePath, "template.md")).ShouldBeTrue();
                 File.Exists(
