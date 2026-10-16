@@ -9,7 +9,8 @@
 
 ## Requirements
 
-dotADR targets .NET 10 and requires .NET 10 or later.
+dotADR 0.3.0 and later target .NET 10 and require .NET 10 or later. Earlier releases (0.2.0)
+target .NET 8 and require .NET 8 or later.
 
 ## Install
 
