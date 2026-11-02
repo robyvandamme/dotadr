@@ -3,6 +3,7 @@
 using DotAdr.Commands;
 using DotAdr.Commands.Add;
 using DotAdr.Commands.Init;
+using DotAdr.Common;
 using Serilog;
 using Spectre.Console.Cli;
 
@@ -10,10 +11,11 @@ namespace DotAdr;
 
 internal static class CommandConfiguration
 {
-    internal static void Configure(this CommandApp commandApp, ILogger logger)
+    internal static void Configure(this CommandApp commandApp, ILogger logger, VersionInfo versionInfo)
     {
         ArgumentNullException.ThrowIfNull(commandApp);
         ArgumentNullException.ThrowIfNull(logger);
+        ArgumentNullException.ThrowIfNull(versionInfo);
 
         commandApp.Configure(config =>
         {
@@ -22,6 +24,7 @@ internal static class CommandConfiguration
             config.ValidateExamples();
 #endif
             config.SetApplicationName("dotadr");
+            config.SetApplicationVersion(versionInfo.Version);
             config.Settings.Registrar.RegisterInstance(logger);
 
             config.Settings.Registrar.Register<IConfigurationService, ConfigurationService>();

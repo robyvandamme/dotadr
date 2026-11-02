@@ -7,6 +7,8 @@ namespace DotAdr.Common;
 
 internal record VersionInfo
 {
+    private const string UnavailableVersion = "not available";
+
     public VersionInfo(Assembly assembly)
     {
         ArgumentNullException.ThrowIfNull(assembly);
@@ -17,10 +19,15 @@ internal record VersionInfo
             AssemblyVersion = version.ToString();
         }
 
-        AssemblyFileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
-        ProductVersion = FileVersionInfo.GetVersionInfo(assembly.Location).ProductVersion;
+        var location = assembly.Location;
+        if (!string.IsNullOrEmpty(location) && File.Exists(location))
+        {
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(location);
+            AssemblyFileVersionInfo = fileVersionInfo.FileVersion;
+            ProductVersion = fileVersionInfo.ProductVersion;
+        }
 
-        Version = ParseProductVersion(ProductVersion);
+        Version = ResolveVersion(ProductVersion, AssemblyFileVersionInfo, AssemblyVersion);
     }
 
     internal static string? ParseProductVersion(string? productVersion)
@@ -34,11 +41,35 @@ internal record VersionInfo
         return plusSign >= 0 ? productVersion[..plusSign] : productVersion;
     }
 
+    internal static string ResolveVersion(
+        string? productVersion,
+        string? fileVersion,
+        string? assemblyVersion)
+    {
+        var parsedProductVersion = ParseProductVersion(productVersion);
+        if (!string.IsNullOrWhiteSpace(parsedProductVersion))
+        {
+            return parsedProductVersion;
+        }
+
+        if (!string.IsNullOrWhiteSpace(fileVersion))
+        {
+            return fileVersion;
+        }
+
+        if (!string.IsNullOrWhiteSpace(assemblyVersion))
+        {
+            return assemblyVersion;
+        }
+
+        return UnavailableVersion;
+    }
+
     public string? AssemblyVersion { get; }
 
     public string? AssemblyFileVersionInfo { get; }
 
     public string? ProductVersion { get; }
 
-    public string? Version { get; }
+    public string Version { get; }
 }
