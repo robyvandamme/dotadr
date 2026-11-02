@@ -20,6 +20,10 @@ internal static class ArgumentHandler
     /// A token following a bare flag is only treated as an explicit value when it is "true" or "false". Any other
     /// token is left for Spectre to interpret (a positional argument on commands that declare one, or a parse error
     /// otherwise), so the flag is treated as bare.
+    /// <para>
+    /// When the option is repeated, the first occurrence wins. Spectre binds the last occurrence instead; repeated
+    /// options are not expected in normal use.
+    /// </para>
     /// </remarks>
     internal static bool IsDebugMode(string[] args)
     {
@@ -66,6 +70,10 @@ internal static class ArgumentHandler
     /// it can only affect the logging configured for a run that is about to fail; returning no file name is the safe
     /// outcome.
     /// </summary>
+    /// <remarks>
+    /// When the option is repeated, the first occurrence wins. Spectre binds the last occurrence instead; repeated
+    /// options are not expected in normal use.
+    /// </remarks>
     internal static string LogFile(string[] args)
     {
         // Check if args is empty
