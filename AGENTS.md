@@ -36,7 +36,7 @@
   - `./build.sh` (restore, compile, test, pack pipeline)
   - `./build.sh Test`
   - `dotnet test test/DotAdr.Tests/DotAdr.Tests.csproj`
-  - `dotnet run --project src/DotAdr -- init --debug true --logfile debug.log`
+  - `dotnet run --project src/DotAdr -- init --debug --logfile debug.log`
 - Packaging: project is a .NET tool (`PackAsTool=true`, command name `dotadr`).
 
 ## Testing Patterns To Follow

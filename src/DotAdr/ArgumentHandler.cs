@@ -4,9 +4,25 @@ namespace DotAdr;
 
 internal static class ArgumentHandler
 {
+    private const string DebugOption = "--debug";
+    private const string DebugOptionPrefix = "--debug=";
+    private const string LogFileOption = "--logfile";
+    private const string LogFileOptionPrefix = "--logfile=";
+
+    /// <summary>
+    /// Determines whether debug logging is enabled. Aligned with the Spectre.Console.Cli grammar so that the outcome
+    /// depends only on argument forms that the application would also accept: explicit "true"/"false" values and the
+    /// bare flag. An inline value other than "true" is either explicitly disabled or rejected by Spectre, so the helper
+    /// fails closed (returns false) for those.
+    /// </summary>
+    /// <remarks>
+    /// A token following a bare flag is only treated as an explicit value when it is "true" or "false". Any other
+    /// token is left for Spectre to interpret (a positional argument on commands that declare one, or a parse error
+    /// otherwise), so the flag is treated as bare.
+    /// </remarks>
     internal static bool IsDebugMode(string[] args)
     {
-        // Check if args is null or empty
+        // Check if args is empty
         if (args.Length == 0)
         {
             return false;
@@ -14,23 +30,29 @@ internal static class ArgumentHandler
 
         for (var i = 0; i < args.Length; i++)
         {
-            if (args[i].Equals("--debug", StringComparison.OrdinalIgnoreCase))
+            if (args[i].Equals(DebugOption, StringComparison.OrdinalIgnoreCase))
             {
-                // Check if this is the last argument or if the next argument isn't "true"
-                if (i == args.Length - 1)
+                // An explicit "true"/"false" value token enables or disables debug logging.
+                if (i < args.Length - 1 && args[i + 1].Equals("false", StringComparison.OrdinalIgnoreCase))
                 {
-                    // "--debug" is the last argument with no value
                     return false;
                 }
 
-                // Check if the next argument is "true"
-                if (args[i + 1].Equals("true", StringComparison.OrdinalIgnoreCase))
+                if (i < args.Length - 1 && args[i + 1].Equals("true", StringComparison.OrdinalIgnoreCase))
                 {
                     return true;
                 }
 
-                // "--debug" is present but followed by something other than "true"
-                return false;
+                // Any other token is either absent or interpreted by Spectre as a positional argument, so the flag was
+                // used bare.
+                return true;
+            }
+
+            // The "--debug=value" form carries its value in the same token. Only "true" enables; anything else is
+            // either explicitly disabled or a value Spectre rejects.
+            if (args[i].StartsWith(DebugOptionPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return args[i][DebugOptionPrefix.Length..].Equals("true", StringComparison.OrdinalIgnoreCase);
             }
         }
 
@@ -38,16 +60,22 @@ internal static class ArgumentHandler
         return false;
     }
 
+    /// <summary>
+    /// Determines the log file, if requested. Note that "--logfile=" (empty inline value) is rejected by Spectre, so
+    /// it can only affect the logging configured for a run that is about to fail; returning no file name is the safe
+    /// outcome.
+    /// </summary>
     internal static string LogFile(string[] args)
     {
+        // Check if args is empty
         if (args.Length == 0)
         {
             return string.Empty;
         }
 
-        for (int i = 0; i < args.Length; i++)
+        for (var i = 0; i < args.Length; i++)
         {
-            if (args[i].Equals("--logfile", StringComparison.OrdinalIgnoreCase))
+            if (args[i].Equals(LogFileOption, StringComparison.OrdinalIgnoreCase))
             {
                 // Check if this is the last argument
                 if (i == args.Length - 1)
@@ -57,6 +85,12 @@ internal static class ArgumentHandler
                 }
 
                 return args[i + 1];
+            }
+
+            // The "--logfile=value" form carries its value in the same token.
+            if (args[i].StartsWith(LogFileOptionPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                return args[i][LogFileOptionPrefix.Length..];
             }
         }
 

@@ -6,6 +6,7 @@ using DotAdr.Common;
 using Moq;
 using Serilog;
 using Shouldly;
+using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
@@ -200,6 +201,85 @@ public class InitAdrCommandTests
             {
                 adrDirectory.EnsureDirectoryDeleted();
             }
+        }
+    }
+
+    public class RunAsync
+    {
+        [Theory]
+        [InlineData("--debug")]
+        [InlineData("--debug=true")]
+        [InlineData("--debug=false")]
+        [InlineData("--logfile=app.log")]
+        [InlineData("--debug", "--logfile", "app.log")]
+        public async Task With_Debug_And_LogFile_Syntax_Accepted_By_Spectre_Returns_0(params string[] arguments)
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var configurationService = new Mock<IConfigurationService>();
+            var app = CreateApp(console, configurationService.Object);
+
+            var result = await app.RunAsync(["init", .. arguments]);
+
+            result.ShouldBe(0);
+        }
+
+        [Theory]
+        [InlineData("-o")]
+        [InlineData("-o", "true")]
+        public async Task With_Overwrite_Syntax_Sets_Overwrite_To_True(params string[] arguments)
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var configurationService = new Mock<IConfigurationService>();
+            var app = CreateApp(console, configurationService.Object);
+
+            var result = await app.RunAsync(["init", .. arguments]);
+
+            result.ShouldBe(0);
+            configurationService.Verify(
+                service => service.SaveAdrConfiguration(It.IsAny<LocalDirectory>(), true),
+                Times.Once);
+        }
+
+        [Fact]
+        public async Task With_Explicitly_Disabled_Overwrite_Sets_Overwrite_To_False()
+        {
+            using var console = new TestConsole();
+            console.EmitAnsiSequences = false;
+            var configurationService = new Mock<IConfigurationService>();
+            var app = CreateApp(console, configurationService.Object);
+
+            var result = await app.RunAsync(["init", "-o", "false"]);
+
+            result.ShouldBe(0);
+            configurationService.Verify(
+                service => service.SaveAdrConfiguration(It.IsAny<LocalDirectory>(), false),
+                Times.Once);
+        }
+
+        private static CommandApp CreateApp(TestConsole console, IConfigurationService configurationService)
+        {
+            IAnsiConsole ansiConsole = console;
+            var app = new CommandApp();
+
+            app.Configure(config =>
+            {
+                config.PropagateExceptions();
+
+                // Set the console on the settings as well: Spectre caches the default console taken from
+                // AnsiConsole.Console statically, which would otherwise leak a disposed TestConsole between tests
+                // that swap the global console.
+                config.Settings.Console = ansiConsole;
+                config.Settings.Registrar.RegisterInstance(ansiConsole);
+                config.Settings.Registrar.RegisterInstance(new Mock<ILogger>().Object);
+                config.Settings.Registrar.RegisterInstance(new Mock<IAdrFileService>().Object);
+                config.Settings.Registrar.RegisterInstance(new Mock<IAdrFactory>().Object);
+                config.Settings.Registrar.RegisterInstance(configurationService);
+                config.AddCommand<InitAdrCommand>("init");
+            });
+
+            return app;
         }
     }
 }
