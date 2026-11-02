@@ -29,7 +29,7 @@ Log.Debug("Configuring app");
 
 var commandApp = new CommandApp();
 
-commandApp.Configure(Log.Logger);
+commandApp.Configure(Log.Logger, versionInfo);
 
 try
 {
