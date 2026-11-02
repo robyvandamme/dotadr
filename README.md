@@ -109,6 +109,9 @@ disables it. The `--debug=true` and `--debug=false` forms are also accepted.
 
 `--logfile` sends log output to the given file, specified either as `--logfile path` or `--logfile=path`.
 
+Logging is configured after the command line has been parsed, so arguments that fail to parse are reported on the
+console but are not written to `--logfile`.
+
 ## The ADR Template
 
 The default template is based

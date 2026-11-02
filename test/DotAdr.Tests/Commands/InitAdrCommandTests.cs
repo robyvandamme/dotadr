@@ -260,14 +260,51 @@ public class InitAdrCommandTests
                 Times.Once);
         }
 
-        private static CommandApp CreateApp(TestConsole console, IConfigurationService configurationService)
+        [Fact]
+        public async Task With_Parse_Error_Does_Not_Create_Log_File()
+        {
+            var directory = Path.Combine(Path.GetTempPath(), $"dotadr-parse-{Guid.NewGuid():N}");
+            var logFile = Path.Combine(directory, "app.log");
+            Directory.CreateDirectory(directory);
+
+            try
+            {
+                using var console = new TestConsole();
+                console.EmitAnsiSequences = false;
+                var configurationService = new Mock<IConfigurationService>();
+                var interceptor = new LoggingInterceptor(new VersionInfo(typeof(InitAdrCommand).Assembly));
+                var app = CreateApp(
+                    console,
+                    configurationService.Object,
+                    propagateExceptions: false,
+                    interceptor);
+
+                var result = await app.RunAsync(["init", "--debug=yes", "--logfile", logFile]);
+
+                result.ShouldBe(-1);
+                Directory.GetFiles(directory).ShouldBeEmpty();
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        private static CommandApp CreateApp(
+            TestConsole console,
+            IConfigurationService configurationService,
+            bool propagateExceptions = true,
+            ICommandInterceptor? interceptor = null)
         {
             IAnsiConsole ansiConsole = console;
             var app = new CommandApp();
 
             app.Configure(config =>
             {
-                config.PropagateExceptions();
+                if (propagateExceptions)
+                {
+                    config.PropagateExceptions();
+                }
 
                 // Set the console on the settings as well: Spectre caches the default console taken from
                 // AnsiConsole.Console statically, which would otherwise leak a disposed TestConsole between tests
@@ -278,6 +315,12 @@ public class InitAdrCommandTests
                 config.Settings.Registrar.RegisterInstance(new Mock<IAdrFileService>().Object);
                 config.Settings.Registrar.RegisterInstance(new Mock<IAdrFactory>().Object);
                 config.Settings.Registrar.RegisterInstance(configurationService);
+
+                if (interceptor is not null)
+                {
+                    config.Settings.Registrar.RegisterInstance<ICommandInterceptor>(interceptor);
+                }
+
                 config.AddCommand<InitAdrCommand>("init");
             });
 
