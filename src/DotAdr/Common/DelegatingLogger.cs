@@ -11,6 +11,10 @@ namespace DotAdr.Common;
 /// after dependency injection has registered the logger, so the logger instance handed to commands must resolve the
 /// active logger at call time.
 /// </summary>
+/// <remarks>
+/// The remaining <see cref="ILogger"/> members are provided by Serilog 4's default interface implementations, which
+/// funnel into the forwarded members above; the small surface is intentional.
+/// </remarks>
 internal sealed class DelegatingLogger : ILogger
 {
     /// <inheritdoc/>
