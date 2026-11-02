@@ -29,7 +29,7 @@ internal static class CommandConfiguration
             config.ValidateExamples();
 #endif
             config.SetApplicationName("dotadr");
-            config.SetApplicationVersion(versionInfo.Version ?? "not available");
+            config.SetApplicationVersion(versionInfo.Version);
 
             if (console is not null)
             {
