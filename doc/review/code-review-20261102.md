@@ -138,7 +138,7 @@ proliferating it in command-level tests that do exercise async commands.
 `RunAsync(...).GetAwaiter().GetResult()`, so the test executes the same code path as production.
 No change needed.
 
-### 5. Info — Redundant assertion in `Prints_Application_Version`
+### 5. Info — Redundant assertion in `Prints_Application_Version` — ✅ Fixed in `ddb711c`
 
 `test/DotAdr.Tests/CommandConfigurationTests.cs:40-41`
 
@@ -160,6 +160,11 @@ Optionally also assert that `--version` returns before touching output semantics
 done via `result.ShouldBe(0)`. No change required.
 
 **Severity:** Info.
+
+**Resolution:** The redundant `versionInfo.Version.ShouldNotBeNullOrWhiteSpace()` assertion was
+removed in `ddb711c` while reworking the console injection. `Version` is now non-nullable and
+guaranteed non-blank by `VersionInfo.ResolveVersion`; the test asserts the captured output
+directly via `console.Output.ShouldContain(versionInfo.Version)`.
 
 ---
 
@@ -184,9 +189,9 @@ done via `result.ShouldBe(0)`. No change required.
 **Approve with minor comments.** No blocking issues. Findings 1 and 3 were addressed in `fd31358`
 (testable version fallback chain, single `FileVersionInfo` call with an empty/missing-location
 guard) and finding 2 in a follow-up (test-only optional parameter removed). Finding 4 was verified
-as a non-issue; only finding 5 remains informational.
+as a non-issue, and the redundant assertion in finding 5 was removed as part of the same rework.
 
 ---
 
 *Findings count: 3 minor, 2 informational. No security or correctness issues found.*
-*Status: Findings 1, 2 and 3 fixed; finding 4 verified as a non-issue; finding 5 accepted as-is.*
+*Status: Findings 1, 2, 3 and 5 fixed; finding 4 verified as a non-issue.*
