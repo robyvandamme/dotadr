@@ -14,8 +14,7 @@ internal static class ArgumentHandler
     /// <summary>
     /// Determines whether debug logging is enabled. Aligned with the Spectre.Console.Cli grammar so that the outcome
     /// depends only on argument forms that the application would also accept: explicit "true"/"false" values and the
-    /// bare flag. An inline value other than "true" is either explicitly disabled or rejected by Spectre, so the helper
-    /// fails closed (returns false) for those.
+    /// bare flag. An inline value is treated as enabled only when it is "true"; every other inline value returns false.
     /// </summary>
     /// <remarks>
     /// A token following a bare flag is only treated as an explicit value when it is "true" or "false". Any other
