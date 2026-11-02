@@ -9,7 +9,7 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>dotadr</ToolCommandName>
     <Authors>Roby Van Damme</Authors>
-    <Copyright>Copyright © 2025 Roby Van Damme.</Copyright>
+    <Copyright>Copyright © Roby Van Damme.</Copyright>
     <PackageId>dotADR</PackageId>
     <Product>dotADR</Product>
     <Description>.NET Tool to create Architectural Decision Records in .NET solutions.</Description>
