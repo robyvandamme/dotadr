@@ -26,7 +26,7 @@ the happy path (`--version` output) and the new guard clause. Findings below are
 
 ## Findings
 
-### 1. Minor — Untested fallback branch: `Version ?? "not available"`
+### 1. Minor — Untested fallback branch: `Version ?? "not available"` — ✅ Fixed in `fd31358`
 
 `src/DotAdr/CommandConfiguration.cs:32`
 
@@ -51,6 +51,11 @@ This follows the project precedent in `VersionInfo` where the parsing logic is e
 `internal static` for direct unit testing.
 
 **Severity:** Minor (coverage gap on a trivial branch).
+
+**Resolution:** The fallback decision moved into `VersionInfo` as a testable `ResolveVersion`
+chain (`ProductVersion` → `FileVersion` → `AssemblyVersion` → `"not available"`), and
+`CommandConfiguration` now passes `versionInfo.Version` directly. All branches are covered by
+`Resolves_Version_With_Fallback`.
 
 ### 2. Minor — Test-only seam in production API changed to optional parameter
 
@@ -77,7 +82,7 @@ The optional `console` parameter exists only so tests can swap the output sink; 
 
 **Severity:** Minor (design note, no change required).
 
-### 3. Minor — `VersionInfo` calls `FileVersionInfo.GetVersionInfo` twice and assumes non-single-file publish
+### 3. Minor — `VersionInfo` calls `FileVersionInfo.GetVersionInfo` twice and assumes non-single-file publish — ✅ Fixed in `fd31358`
 
 Note: this code is **pre-existing** on `main` and not part of this branch's diff, but the branch
 promotes `VersionInfo` onto the startup path of every command, so it is worth flagging while it
@@ -103,6 +108,11 @@ ProductVersion = fileVersionInfo.ProductVersion;
   read into `AssemblyVersion`) when `Location` is empty.
 
 **Severity:** Minor (robustness / duplicate call; pre-existing, not blocking the branch).
+
+**Resolution:** File metadata is read once into a local and skipped when `Assembly.Location` is
+empty or the file is missing. `VersionInfo.Version` is now non-nullable and falls back to
+`AssemblyFileVersionInfo` / `AssemblyVersion` instead of degrading to `null`. The empty-location
+path is covered by `Falls_Back_To_Assembly_Version_When_Assembly_Has_No_Location`.
 
 ### 4. Info — Synchronous `Run` in tests vs. `RunAsync` in production
 
@@ -162,10 +172,11 @@ done via `result.ShouldBe(0)`. No change required.
 
 ## Verdict
 
-**Approve with minor comments.** No blocking issues. Recommendations 1 and 3 are cheap, low-risk
-follow-ups (testable fallback extraction, duplicated `FileVersionInfo` call); 2, 4 and 5 are
-informational.
+**Approve with minor comments.** No blocking issues. Findings 1 and 3 were addressed in `fd31358`
+(testable version fallback chain, single `FileVersionInfo` call with an empty/missing-location
+guard); findings 2, 4 and 5 remain informational.
 
 ---
 
 *Findings count: 3 minor, 2 informational. No security or correctness issues found.*
+*Status: Findings 1 and 3 fixed in `fd31358`; findings 2, 4 and 5 accepted as-is.*
