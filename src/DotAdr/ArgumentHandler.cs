@@ -8,6 +8,8 @@ internal static class ArgumentHandler
     private const string DebugOptionPrefix = "--debug=";
     private const string LogFileOption = "--logfile";
     private const string LogFileOptionPrefix = "--logfile=";
+    private const string TrueValue = "true";
+    private const string FalseValue = "false";
 
     /// <summary>
     /// Determines whether debug logging is enabled. Aligned with the Spectre.Console.Cli grammar so that the outcome
@@ -33,12 +35,12 @@ internal static class ArgumentHandler
             if (args[i].Equals(DebugOption, StringComparison.OrdinalIgnoreCase))
             {
                 // An explicit "true"/"false" value token enables or disables debug logging.
-                if (i < args.Length - 1 && args[i + 1].Equals("false", StringComparison.OrdinalIgnoreCase))
+                if (i < args.Length - 1 && args[i + 1].Equals(FalseValue, StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }
 
-                if (i < args.Length - 1 && args[i + 1].Equals("true", StringComparison.OrdinalIgnoreCase))
+                if (i < args.Length - 1 && IsTrue(args[i + 1]))
                 {
                     return true;
                 }
@@ -52,7 +54,7 @@ internal static class ArgumentHandler
             // either explicitly disabled or a value Spectre rejects.
             if (args[i].StartsWith(DebugOptionPrefix, StringComparison.OrdinalIgnoreCase))
             {
-                return args[i][DebugOptionPrefix.Length..].Equals("true", StringComparison.OrdinalIgnoreCase);
+                return IsTrue(args[i][DebugOptionPrefix.Length..]);
             }
         }
 
@@ -106,5 +108,10 @@ internal static class ArgumentHandler
         return token.Length == 0
             || token[0] != '-'
             || (token.Length > 1 && char.IsDigit(token[1]));
+    }
+
+    private static bool IsTrue(string value)
+    {
+        return value.Equals(TrueValue, StringComparison.OrdinalIgnoreCase);
     }
 }
