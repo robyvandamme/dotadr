@@ -8,6 +8,11 @@ namespace DotAdr.Commands;
 /// <summary>
 /// Base class for command settings.
 /// </summary>
+/// <remarks>
+/// Every command settings type must derive from this type. The <see cref="DotAdr.LoggingInterceptor"/> only configures
+/// logging when the bound settings are an <see cref="AdrSettings"/>; settings of another type would silently skip
+/// logging configuration.
+/// </remarks>
 internal abstract class AdrSettings : CommandSettings
 {
     /// <summary>
