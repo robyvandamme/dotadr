@@ -290,6 +290,40 @@ public class InitAdrCommandTests
             }
         }
 
+        [Fact]
+        public async Task With_LogFile_Configures_Logging_End_To_End()
+        {
+            var directory = Path.Combine(Path.GetTempPath(), $"dotadr-logging-{Guid.NewGuid():N}");
+            var logFile = Path.Combine(directory, "app.log");
+            var originalLogger = Log.Logger;
+
+            Directory.CreateDirectory(directory);
+
+            try
+            {
+                using var console = new TestConsole();
+                console.EmitAnsiSequences = false;
+                var configurationService = new Mock<IConfigurationService>();
+                var interceptor = new LoggingInterceptor(new VersionInfo(typeof(InitAdrCommand).Assembly));
+                var app = CreateApp(console, configurationService.Object, interceptor: interceptor);
+
+                var result = await app.RunAsync(["init", "--debug", "--logfile", logFile]);
+
+                await Log.CloseAndFlushAsync();
+
+                result.ShouldBe(0);
+                var writtenFile = Directory.GetFiles(directory, "app*.log").ShouldHaveSingleItem();
+                var content = await File.ReadAllTextAsync(writtenFile);
+                content.ShouldContain("Starting init");
+            }
+            finally
+            {
+                await Log.CloseAndFlushAsync();
+                Log.Logger = originalLogger;
+                Directory.Delete(directory, true);
+            }
+        }
+
         private static CommandApp CreateApp(
             TestConsole console,
             IConfigurationService configurationService,
