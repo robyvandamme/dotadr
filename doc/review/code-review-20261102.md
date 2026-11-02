@@ -119,7 +119,7 @@ empty or the file is missing. `VersionInfo.Version` is now non-nullable and fall
 `AssemblyFileVersionInfo` / `AssemblyVersion` instead of degrading to `null`. The empty-location
 path is covered by `Falls_Back_To_Assembly_Version_When_Assembly_Has_No_Location`.
 
-### 4. Info — Synchronous `Run` in tests vs. `RunAsync` in production
+### 4. Info — Synchronous `Run` in tests vs. `RunAsync` in production — ✅ Verified: no issue
 
 `test/DotAdr.Tests/CommandConfigurationTests.cs:37`
 
@@ -133,6 +133,10 @@ not exercise the same code branch as production. Acceptable for this purpose; ju
 proliferating it in command-level tests that do exercise async commands.
 
 **Severity:** Info.
+
+**Resolution:** Verified against Spectre.Console.Cli 0.57.2: `CommandApp.Run` delegates to
+`RunAsync(...).GetAwaiter().GetResult()`, so the test executes the same code path as production.
+No change needed.
 
 ### 5. Info — Redundant assertion in `Prints_Application_Version`
 
@@ -179,10 +183,10 @@ done via `result.ShouldBe(0)`. No change required.
 
 **Approve with minor comments.** No blocking issues. Findings 1 and 3 were addressed in `fd31358`
 (testable version fallback chain, single `FileVersionInfo` call with an empty/missing-location
-guard) and finding 2 in a follow-up (test-only optional parameter removed); findings 4 and 5
-remain informational.
+guard) and finding 2 in a follow-up (test-only optional parameter removed). Finding 4 was verified
+as a non-issue; only finding 5 remains informational.
 
 ---
 
 *Findings count: 3 minor, 2 informational. No security or correctness issues found.*
-*Status: Findings 1, 2 and 3 fixed; findings 4 and 5 accepted as-is.*
+*Status: Findings 1, 2 and 3 fixed; finding 4 verified as a non-issue; finding 5 accepted as-is.*
