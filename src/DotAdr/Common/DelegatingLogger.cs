@@ -12,9 +12,16 @@ namespace DotAdr.Common;
 /// active logger at call time.
 /// </summary>
 /// <remarks>
+/// Spectre builds its dependency injection container before it runs interceptors. The interceptor replaces
+/// <see cref="Log.Logger"/> (Serilog loggers are immutable) rather than mutating the logger registered here, so a
+/// logger captured at registration time would stay pointed at the silent default. Commands and services resolve
+/// <see cref="ILogger"/> after interception, but this instance is registered earlier, so it looks up the active
+/// logger on every call.
+/// <para>
 /// Only <see cref="Write(LogEvent)"/> and <see cref="IsEnabled"/> are forwarded. The other <see cref="ILogger"/>
 /// members, including the convenience <c>Write</c> overloads and <c>ForContext</c>, are Serilog 4 default interface
 /// implementations that funnel into <see cref="Write(LogEvent)"/>; the small surface is intentional.
+/// </para>
 /// </remarks>
 internal sealed class DelegatingLogger : ILogger
 {

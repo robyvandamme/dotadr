@@ -17,6 +17,8 @@ try
     var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
     var commandApp = new CommandApp();
 
+    // Logging is configured by LoggingInterceptor once Spectre has parsed the command line, so the registered logger
+    // forwards to the active Log.Logger at call time. See LoggingInterceptor for the lifecycle.
     commandApp.Configure(new DelegatingLogger(), versionInfo);
 
     return await commandApp.RunAsync(args);
