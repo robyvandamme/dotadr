@@ -1,4 +1,4 @@
-// Copyright © 2025 Roby Van Damme.
+// Copyright © Roby Van Damme.
 
 using DotAdr.Commands;
 using DotAdr.Commands.Init;
@@ -88,7 +88,8 @@ public class InitAdrCommandTests
             var context = new CommandContext(["adr", "init"], remainingArguments.Object, "init", null);
             var settings = new InitAdrSettings
             {
-                Directory = adrDirectory.RelativePath, TemplatePath = customTemplateFile.FullName,
+                Directory = adrDirectory.RelativePath,
+                TemplatePath = customTemplateFile.FullName,
             };
 
             var result = command.Execute(context, settings, CancellationToken.None);

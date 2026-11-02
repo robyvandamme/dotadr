@@ -1,4 +1,4 @@
-// Copyright © 2025 Roby Van Damme.
+// Copyright © Roby Van Damme.
 
 using System.Globalization;
 using DotAdr.Commands;
@@ -252,7 +252,8 @@ public class AddAdrCommandTests
                 var context = new CommandContext(["adr", "add"], remainingArguments.Object, "add", null);
                 var settings = new AddAdrSettings
                 {
-                    Title = "Custom Template Decision", TemplatePath = customTemplateFile.FullName,
+                    Title = "Custom Template Decision",
+                    TemplatePath = customTemplateFile.FullName,
                 };
                 var result = command.Execute(context, settings, CancellationToken.None);
 

@@ -1,4 +1,4 @@
-// Copyright © 2025 Roby Van Damme.
+// Copyright © Roby Van Damme.
 
 using System.Text.Json;
 using DotAdr.Common;
@@ -10,7 +10,8 @@ internal class ConfigurationService(ILogger logger) : IConfigurationService
 {
     private readonly JsonSerializerOptions _jsonSerializerOptions = new()
     {
-        WriteIndented = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
     };
 
     internal string ConfigFilePath { get; } = "./dotadr.json";
