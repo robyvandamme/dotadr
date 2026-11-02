@@ -2,7 +2,6 @@
 
 using System.Diagnostics;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using DotAdr;
 using DotAdr.Common;
 using Serilog;
@@ -13,27 +12,14 @@ using Spectre.Console.Cli;
 Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
 #endif
 
-LoggerConfigurator.Configure(args);
-
 var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
-var platform = PlatformInfo.GetPlatform();
-
-Log.Debug(
-    "DotADR {Version} running on {Runtime}, {Platform} {Architecture} (OS details: {OSDescription})",
-    versionInfo.Version,
-    RuntimeInformation.FrameworkDescription,
-    platform,
-    RuntimeInformation.ProcessArchitecture,
-    RuntimeInformation.OSDescription);
-Log.Debug("Configuring app");
 
 var commandApp = new CommandApp();
 
-commandApp.Configure(Log.Logger, versionInfo);
+commandApp.Configure(new DelegatingLogger(), versionInfo);
 
 try
 {
-    Log.Debug("Starting app");
     return await commandApp.RunAsync(args);
 }
 #pragma warning disable CA1031

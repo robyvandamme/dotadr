@@ -26,6 +26,8 @@ internal static class CommandConfiguration
             config.SetApplicationName("dotadr");
             config.SetApplicationVersion(versionInfo.Version);
             config.Settings.Registrar.RegisterInstance(logger);
+            config.Settings.Registrar.RegisterInstance<ICommandInterceptor, LoggingInterceptor>(
+                new LoggingInterceptor(versionInfo));
 
             config.Settings.Registrar.Register<IConfigurationService, ConfigurationService>();
             config.Settings.Registrar.Register<IAdrFileService, AdrFileService>();
