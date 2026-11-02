@@ -16,6 +16,14 @@
   - `IAdrFactory` (`src/DotAdr/Commands/AdrFactory.cs`) renders ADR content from template variables.
   - `IConfigurationService` (`src/DotAdr/Commands/ConfigurationService.cs`) reads/writes `dotadr.json`.
 
+## Logging Flow
+- `Program` registers a `DelegatingLogger` as `ILogger`; `CommandConfiguration` registers `LoggingInterceptor`.
+- Spectre parses arguments and binds `AdrSettings` (`--debug`, `--logfile`), then runs interceptors, then creates the command.
+- `LoggingInterceptor` configures Serilog from the bound settings; `DelegatingLogger` forwards to `Log.Logger` at call time because the DI container is built before interception.
+- Do not configure Serilog in `Program` or pre-parse arguments: Spectre has no public parse-only API, and a pre-parser duplicates its grammar.
+- Parse errors and `--help`/`--version` bypass interceptors, so they are not written to `--logfile`.
+- References: [command lifecycle](https://spectreconsole.net/cli/explanation/command-lifecycle-and-execution-flow), [interceptors](https://spectreconsole.net/cli/how-to/intercepting-command-execution).
+
 ## ADR Data Flow (Important)
 - `add` command loads config (`dotadr.json`) -> resolves ADR directory -> reads `template.md`, or a custom template when `-t`/`--template` is provided.
 - Next ADR id is inferred from existing files (`001-...md`, `002-...md`, etc.).
