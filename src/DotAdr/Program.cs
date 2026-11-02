@@ -12,14 +12,13 @@ using Spectre.Console.Cli;
 Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
 #endif
 
-var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
-
-var commandApp = new CommandApp();
-
-commandApp.Configure(new DelegatingLogger(), versionInfo);
-
 try
 {
+    var versionInfo = new VersionInfo(Assembly.GetExecutingAssembly());
+    var commandApp = new CommandApp();
+
+    commandApp.Configure(new DelegatingLogger(), versionInfo);
+
     return await commandApp.RunAsync(args);
 }
 #pragma warning disable CA1031
