@@ -208,6 +208,8 @@ public class InitAdrCommandTests
     {
         [Theory]
         [InlineData("--debug")]
+        [InlineData("--debug", "true")]
+        [InlineData("--debug", "false")]
         [InlineData("--debug=true")]
         [InlineData("--debug=false")]
         [InlineData("--logfile=app.log")]
