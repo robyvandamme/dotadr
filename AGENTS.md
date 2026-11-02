@@ -6,8 +6,8 @@
 - Core implementation lives in `src/DotAdr`; tests live in `test/DotAdr.Tests`.
 
 ## Architecture You Should Learn First
-- Entry point: `src/DotAdr/Program.cs` sets up Serilog and pre-parses `--debug` / `--logfile` before CLI dispatch.
-- Command wiring: `src/DotAdr/CommandConfiguration.cs` registers commands + DI services for Spectre.Console.Cli.
+- Entry point: `src/DotAdr/Program.cs` wires up the CLI; logging is configured by `src/DotAdr/LoggingInterceptor.cs` from the bound `--debug` / `--logfile` settings before the command runs.
+- Command wiring: `src/DotAdr/CommandConfiguration.cs` registers commands, DI services and the logging interceptor for Spectre.Console.Cli.
 - Commands are thin orchestrators:
   - `src/DotAdr/Commands/Init/InitAdrCommand.cs`
   - `src/DotAdr/Commands/Add/AddAdrCommand.cs`
