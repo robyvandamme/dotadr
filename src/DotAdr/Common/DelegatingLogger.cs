@@ -12,8 +12,9 @@ namespace DotAdr.Common;
 /// active logger at call time.
 /// </summary>
 /// <remarks>
-/// The remaining <see cref="ILogger"/> members are provided by Serilog 4's default interface implementations, which
-/// funnel into the forwarded members above; the small surface is intentional.
+/// Only <see cref="Write(LogEvent)"/> and <see cref="IsEnabled"/> are forwarded. The other <see cref="ILogger"/>
+/// members, including the convenience <c>Write</c> overloads and <c>ForContext</c>, are Serilog 4 default interface
+/// implementations that funnel into <see cref="Write(LogEvent)"/>; the small surface is intentional.
 /// </remarks>
 internal sealed class DelegatingLogger : ILogger
 {
@@ -27,15 +28,5 @@ internal sealed class DelegatingLogger : ILogger
     public void Write(LogEvent logEvent)
     {
         Log.Logger.Write(logEvent);
-    }
-
-    /// <inheritdoc/>
-    public void Write(
-        LogEventLevel level,
-        Exception? exception,
-        string messageTemplate,
-        params object?[]? propertyValues)
-    {
-        Log.Logger.Write(level, exception, messageTemplate, propertyValues);
     }
 }
