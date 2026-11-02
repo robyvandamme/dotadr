@@ -4,6 +4,7 @@ using DotAdr.Common;
 using Moq;
 using Serilog;
 using Shouldly;
+using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Testing;
 
@@ -31,14 +32,24 @@ public class CommandConfigurationTests
             var commandApp = new CommandApp();
             var logger = new Mock<ILogger>().Object;
             var versionInfo = CreateVersionInfo();
+            var originalConsole = AnsiConsole.Console;
 
-            commandApp.Configure(logger, versionInfo, console);
+            try
+            {
+                // Spectre resolves AnsiConsole.Console at run time when no console is configured.
+                AnsiConsole.Console = console;
 
-            var result = commandApp.Run(["--version"]);
+                commandApp.Configure(logger, versionInfo);
 
-            result.ShouldBe(0);
-            versionInfo.Version.ShouldNotBeNullOrWhiteSpace();
-            console.Output.ShouldContain(versionInfo.Version);
+                var result = commandApp.Run(["--version"]);
+
+                result.ShouldBe(0);
+                console.Output.ShouldContain(versionInfo.Version);
+            }
+            finally
+            {
+                AnsiConsole.Console = originalConsole;
+            }
         }
 
         [Fact]

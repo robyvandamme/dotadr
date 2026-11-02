@@ -57,7 +57,7 @@ chain (`ProductVersion` → `FileVersion` → `AssemblyVersion` → `"not availa
 `CommandConfiguration` now passes `versionInfo.Version` directly. All branches are covered by
 `Resolves_Version_With_Fallback`.
 
-### 2. Minor — Test-only seam in production API changed to optional parameter
+### 2. Minor — Test-only seam in production API changed to optional parameter — ✅ Fixed in follow-up
 
 `src/DotAdr/CommandConfiguration.cs:19`
 
@@ -81,6 +81,11 @@ The optional `console` parameter exists only so tests can swap the output sink; 
   Right now the semantics must be inferred from the `if (console is not null)` block.
 
 **Severity:** Minor (design note, no change required).
+
+**Resolution:** The test-only optional parameter was removed; `Configure` again takes only the
+three required dependencies. `Prints_Application_Version` now temporarily swaps
+`AnsiConsole.Console` with a `TestConsole` under `try/finally`, which is safe because
+`xunit.runner.json` disables parallel test collections.
 
 ### 3. Minor — `VersionInfo` calls `FileVersionInfo.GetVersionInfo` twice and assumes non-single-file publish — ✅ Fixed in `fd31358`
 
@@ -174,9 +179,10 @@ done via `result.ShouldBe(0)`. No change required.
 
 **Approve with minor comments.** No blocking issues. Findings 1 and 3 were addressed in `fd31358`
 (testable version fallback chain, single `FileVersionInfo` call with an empty/missing-location
-guard); findings 2, 4 and 5 remain informational.
+guard) and finding 2 in a follow-up (test-only optional parameter removed); findings 4 and 5
+remain informational.
 
 ---
 
 *Findings count: 3 minor, 2 informational. No security or correctness issues found.*
-*Status: Findings 1 and 3 fixed in `fd31358`; findings 2, 4 and 5 accepted as-is.*
+*Status: Findings 1, 2 and 3 fixed; findings 4 and 5 accepted as-is.*

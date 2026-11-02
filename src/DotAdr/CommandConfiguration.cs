@@ -5,18 +5,13 @@ using DotAdr.Commands.Add;
 using DotAdr.Commands.Init;
 using DotAdr.Common;
 using Serilog;
-using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace DotAdr;
 
 internal static class CommandConfiguration
 {
-    internal static void Configure(
-        this CommandApp commandApp,
-        ILogger logger,
-        VersionInfo versionInfo,
-        IAnsiConsole? console = null)
+    internal static void Configure(this CommandApp commandApp, ILogger logger, VersionInfo versionInfo)
     {
         ArgumentNullException.ThrowIfNull(commandApp);
         ArgumentNullException.ThrowIfNull(logger);
@@ -30,12 +25,6 @@ internal static class CommandConfiguration
 #endif
             config.SetApplicationName("dotadr");
             config.SetApplicationVersion(versionInfo.Version);
-
-            if (console is not null)
-            {
-                config.ConfigureConsole(console);
-            }
-
             config.Settings.Registrar.RegisterInstance(logger);
 
             config.Settings.Registrar.Register<IConfigurationService, ConfigurationService>();
