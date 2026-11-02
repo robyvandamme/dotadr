@@ -84,7 +84,8 @@ internal static class ArgumentHandler
                     return string.Empty;
                 }
 
-                return args[i + 1];
+                // A token that starts with '-' is an option (or a parse error) for Spectre, not a value.
+                return IsValueToken(args[i + 1]) ? args[i + 1] : string.Empty;
             }
 
             // The "--logfile=value" form carries its value in the same token.
@@ -96,5 +97,14 @@ internal static class ArgumentHandler
 
         // "--logfile" not found in arguments
         return string.Empty;
+    }
+
+    private static bool IsValueToken(string token)
+    {
+        // Spectre tokenizes any argument that starts with '-' as an option (or a parse error), except tokens where
+        // the first character after the dash is a digit (for example "-1" or "-1.log"). Empty arguments are values.
+        return token.Length == 0
+            || token[0] != '-'
+            || (token.Length > 1 && char.IsDigit(token[1]));
     }
 }

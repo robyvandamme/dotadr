@@ -258,5 +258,37 @@ public class ArgumentHandlerTests
             var result = ArgumentHandler.LogFile(args);
             result.ShouldBe(string.Empty);
         }
+
+        [Fact]
+        public void LogFile_Argument_Followed_By_Option_Returns_Empty_String()
+        {
+            var args = new[] { "--verbose", "--logfile", "--debug" };
+            var result = ArgumentHandler.LogFile(args);
+            result.ShouldBe(string.Empty);
+        }
+
+        [Fact]
+        public void LogFile_Argument_Followed_By_Short_Option_Returns_Empty_String()
+        {
+            var args = new[] { "--logfile", "-o" };
+            var result = ArgumentHandler.LogFile(args);
+            result.ShouldBe(string.Empty);
+        }
+
+        [Fact]
+        public void LogFile_Argument_Followed_By_End_Of_Options_Returns_Empty_String()
+        {
+            var args = new[] { "--logfile", "--" };
+            var result = ArgumentHandler.LogFile(args);
+            result.ShouldBe(string.Empty);
+        }
+
+        [Fact]
+        public void LogFile_Argument_Followed_By_Negative_Number_Value_Returns_LogFile_Value()
+        {
+            var args = new[] { "--logfile", "-1.log" };
+            var result = ArgumentHandler.LogFile(args);
+            result.ShouldBe("-1.log");
+        }
     }
 }
