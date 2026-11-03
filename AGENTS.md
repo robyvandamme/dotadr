@@ -6,8 +6,8 @@
 - Core implementation lives in `src/DotAdr`; tests live in `test/DotAdr.Tests`.
 
 ## Architecture You Should Learn First
-- Entry point: `src/DotAdr/Program.cs` sets up Serilog and pre-parses `--debug` / `--logfile` before CLI dispatch.
-- Command wiring: `src/DotAdr/CommandConfiguration.cs` registers commands + DI services for Spectre.Console.Cli.
+- Entry point: `src/DotAdr/Program.cs` wires up the CLI; logging is configured by `src/DotAdr/LoggingInterceptor.cs` from the bound `--debug` / `--logfile` settings before the command runs.
+- Command wiring: `src/DotAdr/CommandConfiguration.cs` registers commands, DI services and the logging interceptor for Spectre.Console.Cli.
 - Commands are thin orchestrators:
   - `src/DotAdr/Commands/Init/InitAdrCommand.cs`
   - `src/DotAdr/Commands/Add/AddAdrCommand.cs`
@@ -15,6 +15,14 @@
   - `IAdrFileService` (`src/DotAdr/Commands/AdrFileService.cs`) handles file/config/template I/O.
   - `IAdrFactory` (`src/DotAdr/Commands/AdrFactory.cs`) renders ADR content from template variables.
   - `IConfigurationService` (`src/DotAdr/Commands/ConfigurationService.cs`) reads/writes `dotadr.json`.
+
+## Logging Flow
+- `Program` registers a `DelegatingLogger` as `ILogger`; `CommandConfiguration` registers `LoggingInterceptor`.
+- Spectre parses arguments and binds `AdrSettings` (`--debug`, `--logfile`), then runs interceptors, then creates the command.
+- `LoggingInterceptor` configures Serilog from the bound settings; `DelegatingLogger` forwards to `Log.Logger` at call time because the DI container is built before interception.
+- Do not configure Serilog in `Program` or pre-parse arguments: Spectre has no public parse-only API, and a pre-parser duplicates its grammar.
+- Parse errors and `--help`/`--version` bypass interceptors, so they are not written to `--logfile`.
+- References: [command lifecycle](https://spectreconsole.net/cli/explanation/command-lifecycle-and-execution-flow), [interceptors](https://spectreconsole.net/cli/how-to/intercepting-command-execution).
 
 ## ADR Data Flow (Important)
 - `add` command loads config (`dotadr.json`) -> resolves ADR directory -> reads `template.md`, or a custom template when `-t`/`--template` is provided.
@@ -36,7 +44,7 @@
   - `./build.sh` (restore, compile, test, pack pipeline)
   - `./build.sh Test`
   - `dotnet test test/DotAdr.Tests/DotAdr.Tests.csproj`
-  - `dotnet run --project src/DotAdr -- init --debug true --logfile debug.log`
+  - `dotnet run --project src/DotAdr -- init --debug --logfile debug.log`
 - Packaging: project is a .NET tool (`PackAsTool=true`, command name `dotadr`).
 
 ## Testing Patterns To Follow

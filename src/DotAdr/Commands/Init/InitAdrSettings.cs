@@ -19,7 +19,7 @@ internal class InitAdrSettings : AdrSettings
 
     [Description("Whether to overwrite existing files.")]
     [CommandOption("-o|--overwrite")]
-    [DefaultValue("false")]
+    [DefaultValue(false)]
     public bool Overwrite { get; init; }
 
     public override ValidationResult Validate()

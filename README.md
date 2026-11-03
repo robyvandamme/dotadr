@@ -53,9 +53,9 @@ USAGE:
 
 EXAMPLES:
     dotnet dotadr init
-    dotnet dotadr init -d ./doc/arch/adr -o true
+    dotnet dotadr init -d ./doc/arch/adr -o
     dotnet dotadr init -t ./doc/templates/adr-template.md
-    dotnet dotadr init --debug true --logfile log.txt
+    dotnet dotadr init --debug --logfile log.txt
 
 OPTIONS:
                        DEFAULT                                                             
@@ -64,7 +64,7 @@ OPTIONS:
         --logfile                   The file to send the log output to                     
     -d, --directory    ./doc/adr    The directory to initialize                            
     -t, --template                  Path to a custom template to use for the initialization
-    -o, --overwrite    false        Whether to overwrite existing files                    
+    -o, --overwrite                 Whether to overwrite existing files                    
 
 ```
 
@@ -85,7 +85,7 @@ EXAMPLES:
     dotnet dotadr add "Implement Circuit Breaker Pattern for External Service Calls"
     dotnet dotadr add "Separate Read and Write Data Models" -s 002
     dotnet dotadr add "Use a Custom ADR Template" -t ./doc/templates/adr-template.md
-    dotnet dotadr add "Use Database Per Service Pattern" --debug true --logfile log.txt
+    dotnet dotadr add "Use Database Per Service Pattern" --debug --logfile log.txt
     dotnet dotadr new "Implement Request Rate Limiting"
 
 ARGUMENTS:
@@ -99,6 +99,18 @@ OPTIONS:
     -t, --template      Path to a custom template to use for the new decision record
 
 ```
+
+## Global Options
+
+All commands accept `--debug` and `--logfile`.
+
+`--debug` enables debug logging for troubleshooting. It can be passed as a bare flag; `--debug false` explicitly
+disables it. The `--debug=true` and `--debug=false` forms are also accepted.
+
+`--logfile` sends log output to the given file, specified either as `--logfile path` or `--logfile=path`.
+
+Logging is configured after the command line has been parsed, so arguments that fail to parse are reported on the
+console but are not written to `--logfile`.
 
 ## The ADR Template
 

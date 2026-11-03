@@ -9,16 +9,14 @@ namespace DotAdr.Common;
 
 internal static class LoggerConfigurator
 {
-    internal static void Configure(string[] args)
+    internal static void Configure(bool debug, string? logFile)
     {
         var defaultLevelSwitch = new LoggingLevelSwitch(LogEventLevel.Error);
 
-        if (ArgumentHandler.IsDebugMode(args))
+        if (debug)
         {
             defaultLevelSwitch.MinimumLevel = LogEventLevel.Debug;
         }
-
-        var logFile = ArgumentHandler.LogFile(args);
 
         if (!string.IsNullOrWhiteSpace(logFile))
         {

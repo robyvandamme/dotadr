@@ -26,6 +26,7 @@ internal static class CommandConfiguration
             config.SetApplicationName("dotadr");
             config.SetApplicationVersion(versionInfo.Version);
             config.Settings.Registrar.RegisterInstance(logger);
+            config.SetInterceptor(new LoggingInterceptor(versionInfo));
 
             config.Settings.Registrar.Register<IConfigurationService, ConfigurationService>();
             config.Settings.Registrar.Register<IAdrFileService, AdrFileService>();
@@ -34,16 +35,16 @@ internal static class CommandConfiguration
             config.AddCommand<InitAdrCommand>(name: "init")
                 .WithDescription("Initialize the ADR directory.")
                 .WithExample("init")
-                .WithExample("init", "-d", "./doc/arch/adr", "-o", "true")
+                .WithExample("init", "-d", "./doc/arch/adr", "-o")
                 .WithExample("init", "-t", "./doc/templates/adr-template.md")
-                .WithExample("init", "--debug", "true", "--logfile", "log.txt");
+                .WithExample("init", "--debug", "--logfile", "log.txt");
             config.AddCommand<AddAdrCommand>(name: "add")
                 .WithAlias("new")
                 .WithDescription("Add a new decision record. Alias: new")
                 .WithExample("add", "\"Implement Circuit Breaker Pattern for External Service Calls\"")
                 .WithExample("add", "\"Separate Read and Write Data Models\"", "-s", "002")
                 .WithExample("add", "\"Use a Custom ADR Template\"", "-t", "./doc/templates/adr-template.md")
-                .WithExample("add", "\"Use Database Per Service Pattern\"", "--debug", "true", "--logfile", "log.txt")
+                .WithExample("add", "\"Use Database Per Service Pattern\"", "--debug", "--logfile", "log.txt")
                 .WithExample("new", "\"Implement Request Rate Limiting\"");
         });
     }
