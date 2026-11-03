@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project Snapshot
-- `dotadr` is a .NET 8 global CLI tool for Architecture Decision Records (ADRs).
+- `dotadr` is a .NET 10 CLI tool for Architecture Decision Records (ADRs), installed as a local or global tool.
 - Main user flows are `dotadr init` (bootstrap) and `dotadr add`/`dotadr new` (create ADRs).
 - Core implementation lives in `src/DotAdr`; tests live in `test/DotAdr.Tests`.
 
@@ -45,7 +45,8 @@
   - `./build.sh Test`
   - `dotnet test test/DotAdr.Tests/DotAdr.Tests.csproj`
   - `dotnet run --project src/DotAdr -- init --debug --logfile debug.log`
-- Packaging: project is a .NET tool (`PackAsTool=true`, command name `dotadr`).
+- Packaging: project is a .NET tool (`PackAsTool=true`, command name `dotadr`), targeting `net10.0`.
+- The SDK version is pinned in `global.json` (`rollForward: disable`), so restore/build requires that exact SDK.
 
 ## Testing Patterns To Follow
 - Testing stack: xUnit + Moq + Shouldly + Spectre.Console.Testing.

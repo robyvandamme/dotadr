@@ -12,14 +12,14 @@
     <Copyright>Copyright © Roby Van Damme.</Copyright>
     <PackageId>dotADR</PackageId>
     <Product>dotADR</Product>
-    <Description>.NET Tool to create Architectural Decision Records in .NET solutions.</Description>
+    <Description>.NET Tool to create and maintain Architectural Decision Records in .NET solutions.</Description>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageProjectUrl>https://github.com/robyvandamme/dotadr</PackageProjectUrl>
     <RepositoryUrl>https://github.com/robyvandamme/dotadr</RepositoryUrl>
     <PackageReleaseNotes>https://github.com/robyvandamme/dotadr/releases</PackageReleaseNotes>
-
+    <PackageTags>dotnet-tool;cli;adr;architecture;software-architecture;docs-as-code</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

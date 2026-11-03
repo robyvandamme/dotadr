@@ -1,6 +1,6 @@
 # dotADR
 
-.NET tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
+.NET tool to create and maintain [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
 [![Release](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/dotADR?color=004D81)](https://www.nuget.org/packages/dotADR/)
@@ -9,8 +9,7 @@
 
 ## Requirements
 
-dotADR 0.3.0 and later target .NET 10 and require .NET 10 or later. Earlier releases (0.2.0)
-target .NET 8 and require .NET 8 or later.
+dotADR targets .NET 10 and requires .NET 10 or later.
 
 ## Install
 
@@ -38,6 +37,29 @@ dotnet tool install -g dotADR
 
 For the examples below, use the `dotnet dotadr` command if you installed it as a local tool, or `dotadr` if you
 installed it as a global tool.
+
+### Command Overview
+
+```text
+USAGE:
+    dotnet dotadr [OPTIONS] <COMMAND>
+
+EXAMPLES:
+    dotnet dotadr init
+    dotnet dotadr init -d ./doc/arch/adr -o
+    dotnet dotadr init -t ./doc/templates/adr-template.md
+    dotnet dotadr init --debug --logfile log.txt
+    dotnet dotadr add "Implement Circuit Breaker Pattern for External Service Calls"
+
+OPTIONS:
+    -h, --help       Prints help information
+    -v, --version    Prints version information
+
+COMMANDS:
+    init           Initialize the ADR directory
+    add <title>    Add a new decision record. Alias: new
+
+```
 
 ### Initialize the ADR Directory
 
@@ -75,11 +97,10 @@ when `-t`/`--template` is provided.
 
 ```text
 DESCRIPTION:
-Add a new decision record
+Add a new decision record. Alias: new
 
 USAGE:
-    dotnet dotadr add [title] [OPTIONS]
-    dotnet dotadr new [title] [OPTIONS]
+    dotnet dotadr add <title> [OPTIONS]
 
 EXAMPLES:
     dotnet dotadr add "Implement Circuit Breaker Pattern for External Service Calls"
@@ -89,7 +110,7 @@ EXAMPLES:
     dotnet dotadr new "Implement Request Rate Limiting"
 
 ARGUMENTS:
-    [title]    The title of the new decision record
+    <title>    The title of the new decision record
 
 OPTIONS:
     -h, --help          Prints help information                                      
@@ -102,7 +123,7 @@ OPTIONS:
 
 ## Global Options
 
-All commands accept `--debug` and `--logfile`.
+All commands accept `-h`/`--help`, `--debug` and `--logfile`. `-v`/`--version` is available on the root command.
 
 `--debug` enables debug logging for troubleshooting. It can be passed as a bare flag; `--debug false` explicitly
 disables it. The `--debug=true` and `--debug=false` forms are also accepted.
@@ -149,7 +170,7 @@ The decision record that is added upon initialization looks like this:
 
 ```
 
-The line containing the `{{SUPERSEDES}}` variable is removed unless the `--supersedes`option is provided.
+The line containing the `{{SUPERSEDES}}` variable is removed unless the `--supersedes` option is provided.
 
 ### Changing the Template
 
