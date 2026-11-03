@@ -1,6 +1,6 @@
 # dotADR
 
-.NET tool to create [Architectural Decision Records](https://adr.github.io) in .NET solutions.
+.NET tool to create and maintain [Architectural Decision Records](https://adr.github.io) in .NET solutions.
 
 [![Release](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml/badge.svg)](https://github.com/robyvandamme/dotadr/actions/workflows/release.yml)
 [![NuGet Version](https://img.shields.io/nuget/v/dotADR?color=004D81)](https://www.nuget.org/packages/dotADR/)
@@ -9,8 +9,7 @@
 
 ## Requirements
 
-dotADR 0.3.0 and later target .NET 10 and require .NET 10 or later. Earlier releases (0.2.0)
-target .NET 8 and require .NET 8 or later.
+dotADR targets .NET 10 and requires .NET 10 or later.
 
 ## Install
 
